@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('frontend.layout');
+    return view('frontend.index');
 });
 
 Route::get('admin',[AdminController::class,'index']);
