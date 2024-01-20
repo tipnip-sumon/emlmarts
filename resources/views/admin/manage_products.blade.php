@@ -87,58 +87,77 @@
                             <label class="form-label">Tax rate</label>
                             <input type="text" placeholder="%" class="form-control" id="tax" name="tax" />
                         </div>
-                        <label class="form-check mb-4">
-                            <input class="form-check-input" type="checkbox" value="" />
-                            <span class="form-check-label"> Make a template </span>
-                        </label>
                 </div>
             </div>
             <!-- card end// -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h4>Shipping</h4>
-                </div>
+            <div class="card-header">
+                <h4>Attibutes</h4>
+            </div>
+            <div class="card mb-4" id="product_attr_box">
                 <div class="card-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-4">
-                                    <label for="product_name" class="form-label">Width</label>
-                                    <input type="text" placeholder="inch" class="form-control" id="product_name" />
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-4">
-                                    <label for="product_name" class="form-label">Height</label>
-                                    <input type="text" placeholder="inch" class="form-control" id="product_name" />
-                                </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="mb-4">
+                                <label for="sku" class="form-label">SKU</label>
+                                <input type="text" placeholder="sku" class="form-control" id="sku",name="sku" />
                             </div>
                         </div>
-                        <div class="mb-4">
-                            <label for="product_name" class="form-label">Weight</label>
-                            <input type="text" placeholder="gam" class="form-control" id="product_name" />
+                        <div class="col-lg-4">
+                            <div class="mb-4">
+                                <label for="mrp" class="form-label">MRP</label>
+                                <input type="text" placeholder="mrp" class="form-control" id="mrp" name="mrp" />
+                            </div>
                         </div>
-                        <div class="mb-4">
-                            <label for="product_name" class="form-label">Shipping fees</label>
-                            <input type="text" placeholder="$" class="form-control" id="product_name" />
+                        <div class="col-lg-4">
+                            <div class="mb-4">
+                                <label for="price" class="form-label">Price</label>
+                                <input type="text" placeholder="Price" class="form-control" id="price" name="price" />
+                            </div>
                         </div>
-                    </form>
+                        <div class="col-lg-4">
+                            <div class="mb-4">
+                                <label for="attr_image" class="form-label">Image</label>
+                                <input type="file" placeholder="attr_image" class="form-control" id="attr_image",name="attr_image" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-4">
+                                <label for="size_id" class="form-label">Size</label>
+                                <select class="form-select" id="size_id" name="size_id">
+                                    <option value="">Size Select</option>
+                                    @foreach ($size as $list)
+                                    <option  value="{{$list->id}}">{{$list->size}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-4">
+                                <label for="color_id" class="form-label">Color</label>
+                                <input type="text" placeholder="color_id" class="form-control" id="color_id" name="color_id" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-4">
+                                <label for="qty" class="form-label">Qty</label>
+                                <input type="text" placeholder="qty" class="form-control" id="qty" name="qty" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <button type="button" class="btn btn-primary" onclick="add_more()"><i class="text-muted material-icons md-post_add"></i>&nbsp;Add</button> 
+                    </div>
                 </div>
             </div>
             <!-- card end// -->
         </div>
         <div class="col-lg-6">
             <div class="card mb-4">
-                <div class="card-header">
-                    <h4>Media</h4>
-                </div>
                 <div class="card-body">
                     <div class="input-upload">
-                        <img src="assets/imgs/theme/upload.svg" alt="" />
                         <input class="form-control" type="file" id="image" name="image"/>
                     </div>
                 </div>
-                
                 @error('image')
                 <div class="mb-4 atert alert-danger">
                     {{$message}}
@@ -154,13 +173,11 @@
                     <div class="row gx-2">
                         <div class="col-sm-6 mb-3">
                             <label class="form-label">Category</label>
-                            <select class="form-select" id="category_id" name="category_id">
-                                
+                            <select class="form-select" id="size_id" name="category_id">
                                 <option value="">Category Select</option>
                                 @foreach ($category as $list)
                                 <option  value="{{$list->id}}">{{$list->category_name}}</option>
                                 @endforeach
-                                
                             </select>
                         </div>
                         @error('category_id')
@@ -250,5 +267,18 @@
 </form>
 </section>
 <!-- content-main end// -->
-
+<script>
+    function add_more(){
+        var html = '<div class="card mb-4"><div class="card-body"><div class="row">';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="sku" class="form-label">SKU</label><input type="text" placeholder="sku" class="form-control" id="sku",name="sku" /></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="mrp" class="form-label">MRP</label><input type="text" placeholder="mrp" class="form-control" id="mrp" name="mrp" /></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="price" class="form-label">Price</label><input type="text" placeholder="Price" class="form-control" id="price" name="price" /></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="attr_image" class="form-label">Image</label><input type="file" placeholder="attr_image" class="form-control" id="attr_image",name="attr_image" /></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="size_id" class="form-label">Size</label><select class="form-select" id="size_id" name="size_id"><option value="">Size Select</option>@foreach ($size as $list)<option  value="{{$list->id}}">{{$list->size}}</option>@endforeach</select></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="color_id" class="form-label">Color</label><input type="text" placeholder="color_id" class="form-control" id="color_id" name="color_id" /></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="qty" class="form-label">Qty</label><input type="text" placeholder="qty" class="form-control" id="qty" name="qty" /></div></div>';
+            html+='</div></div></div>';
+            jQuery('#product_attr_box').append(html);
+    }
+</script>
 @endsection

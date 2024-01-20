@@ -66,17 +66,29 @@ class CategoryController extends Controller
     public function insert(Request $request)
     {
         $request->validate([
-            'category_name'=>'required',
+            'category_name'=>'required|unique:categories',
             'category_slug'=>'required|unique:categories',
+            'image'=>'required|mimes:jpg,jpeg,png',
         ]);
        
         $model = new Category();
+        if($request->hasfile('image')){
+            $image=$request->file('image');
+            $ext = $image->extension();
+            $image_name = time().'.'.$ext;
+            $image->storeAs('/public/media/category',$image_name);
+            $model->category_image = $image_name;
+        }
         
         $model->category_name = $request->post('category_name');
         $model->category_description = $request->post('category_description');
         $model->category_slug = $request->post('category_slug');
+        $model->parent_category_id = $request->post('parent_category_id');
+        // $model->category_image = $request->post('category_image');
         $model->category_order = $request->post('category_order');
+        $model->is_home = $request->post('is_home');
         $model->status = 1;
+
         $model->save();
         $msg = "Category Inserted";
         $request->session()->flash('message',$msg);

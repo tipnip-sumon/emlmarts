@@ -1,5 +1,5 @@
 @extends('admin/layout')
-@section('page_title','Category')
+@section('page_title','Brand')
 @section('cat_active','active')
 @section('container')
 <section class="content-main">
@@ -7,8 +7,8 @@
     <div class="content-header">
         
         <div>
-            <h2 class="content-title card-title">Categories</h2>
-            <p>Add Category</p>
+            <h2 class="content-title card-title">Brand</h2>
+            <p>Add Brand</p>
         </div>
         <div>
             <input type="text" placeholder="Search Categories" class="form-control bg-white" />
@@ -22,49 +22,27 @@
                     <form action="{{route('admin.insert')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-4">
-                            <label for="category_name" class="form-label">Category Name</label>
-                            <input type="text" placeholder="Type here"  class="form-control" id="category_name" name="category_name"/>
+                            <label for="brand_name" class="form-label">Brand Name</label>
+                            <input type="text" placeholder="Type here"  class="form-control" id="brand_name" name="brand_name"/>
                         </div>
-                        @error('category_name')
+                        @error('brand_name')
                         <div class="mb-4 atert alert-danger">
                             {{$message}}
                         </div>
                         @enderror
                         <div class="mb-4">
-                            <label for="category_slug" class="form-label"> Category Slug</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="category_slug" name="category_slug" />
-                        </div>
-                        @error('category_slug')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
-                        @enderror
-                        <div class="mb-4">
-                            <label for="parent_category_id" class="form-label"> Parent Category ID</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="parent_category_id" name="parent_category_id" />
-                        </div>
-                        @error('parent_category_id')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
-                        @enderror
-                        <div class="mb-4">
-                            <label for="parent_category_id" class="form-label">Category Images</label>
+                            <label for="image" class="form-label">Brand Images</label>
                             <div class="input-upload">
                                 <input class="form-control" type="file" id="image" name="image"/>
                             </div>
                         </div>
-                        @error('parent_category_id')
+                        @error('image')
                         <div class="mb-4 atert alert-danger">
                             {{$message}}
                         </div>
                         @enderror
                         <div class="mb-4">
-                            <label for="category_order" class="form-label"> Category Order</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="category_order" name="category_order" />
-                        </div>
-                        <div class="mb-4">
-                            <label for="is_home" class="form-label">Show Category</label>
+                            <label for="is_home" class="form-label">Show Brand</label>
                             <select class="form-select" id="is_home" name="is_home">
                                 <option selected value="0">No</option>
                                 <option  value="1">Yes</option>
@@ -75,12 +53,8 @@
                             {{$message}}
                         </div>
                         @enderror
-                        <div class="mb-4">
-                            <label class="form-label">Description</label>
-                            <textarea placeholder="Type here" class="form-control" id="category_description" name="category_description"></textarea>
-                        </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Create category</button>
+                            <button type="submit" class="btn btn-primary">Create Brand</button>
                         </div>
                         
                     </form>
@@ -96,10 +70,8 @@
                                         </div>
                                     </th>
                                     <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Slug</th>
-                                    <th>Order</th>
+                                    <th>Brand Name</th>
+                                    <th>Image</th>
                                     <th class="text-end">Action</th>
                                 </tr>
                             </thead>
@@ -112,22 +84,24 @@
                                         </div>
                                     </td>
                                     <td>{{$show['id']}}</td>
-                                    <td><b>{{$show['category_name']}}</b></td>
-                                    <td>{{$show['category_description']}}</td>
-                                    <td>{{$show['category_slug']}}</td>
-                                    <td>{{$show['category_order']}}</td>
+                                    <td><b>{{$show['brand_name']}}</b></td>
+                                    <td>
+                                        <div class="left" style="height: 50px;width:50px;">
+                                            <img src="{{asset('storage/media/brand/'.$show->brand_image)}}"  alt="Item" />
+                                        </div>
+                                    </td>
                                     <td class="text-end">
                                         <div class="dropdown">
                                             <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="#">View detail</a>
-                                                <a class="dropdown-item" href="{{url('admin/manage_category/')}}/{{$show['id']}}">Edit info</a>
+                                                <a class="dropdown-item" href="{{url('admin/manage_brand/')}}/{{$show['id']}}">Edit info</a>
                                                 @if($show['status']==1)
-                                                <a class="dropdown-item text-success" href="{{url('admin/category/status/0')}}/{{$show['id']}}">Active</a>
+                                                <a class="dropdown-item text-success" href="{{url('admin/brand/status/0')}}/{{$show['id']}}">Active</a>
                                                 @elseif($show['status']==0)
-                                                <a class="dropdown-item text-danger" href="{{url('admin/category/status/1')}}/{{$show['id']}}">Deactivate</a>
+                                                <a class="dropdown-item text-danger" href="{{url('admin/brand/status/1')}}/{{$show['id']}}">Deactivate</a>
                                                 @endif
-                                                <a class="dropdown-item text-danger" href="{{url('admin/category/delete')}}/{{$show['id']}}">Delete</a>
+                                                <a class="dropdown-item text-danger" href="{{url('admin/brand/delete')}}/{{$show['id']}}">Delete</a>
                                             </div>
                                         </div>
                                         <!-- dropdown //end -->

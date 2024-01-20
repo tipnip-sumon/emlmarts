@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\frontend\FrontController;
 use App\Http\Controllers\ProductController;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +28,8 @@ Route::get('/', function () {
 
 Route::get('admin',[AdminController::class,'index']);
 Route::post('admin/auth',[AdminController::class,'auth'])->name('admin.auth');
+
+Route::get('frontend/index',[FrontController::class,'index'])->name('frontend.index');
 
 Route::group(['middleware'=>'admin_auth'],function(){
     Route::get('admin/dashboard',[AdminController::class,'dashboard']);
@@ -66,6 +71,15 @@ Route::group(['middleware'=>'admin_auth'],function(){
     Route::get('admin/color/status/{status}/{id}',[ColorController::class,'status']);
     Route::get('admin/color/status/{status}/{id}',[ColorController::class,'status_list']);
 
+    Route::get('admin/brand-list',[BrandController::class,'brand_list']);
+    Route::get('admin/brand',[BrandController::class,'index']);
+    Route::get('admin/manage_brand/{id}',[BrandController::class,'manage_brand']);
+    Route::post('admin/brand',[BrandController::class,'manage_brand_update']);
+    Route::post('admin/insert',[BrandController::class,'insert'])->name('admin.insert');
+    Route::get('admin/brand/delete/{id}',[BrandController::class,'delete']);
+    Route::get('admin/brand/status/{status}/{id}',[BrandController::class,'status']);
+    Route::get('admin/brand/status/{status}/{id}',[BrandController::class,'status_list']);
+
     Route::get('admin/product',[ProductController::class,'product_list']);
     Route::get('admin/manage_products',[ProductController::class,'index']);
     Route::get('admin/edit_products/{id}',[ProductController::class,'manage_products']);
@@ -74,7 +88,6 @@ Route::group(['middleware'=>'admin_auth'],function(){
     Route::get('admin/product/delete/{id}',[ProductController::class,'delete']);
     Route::get('admin/product/status/{status}/{id}',[ProductController::class,'status']);
     Route::get('admin/product/status/{status}/{id}',[ProductController::class,'status_list']);
-
     Route::get('admin/logout',function(){
         session()->forget('ADMIN_LOGIN');
         session()->forget('LOGIN_ID');

@@ -15,6 +15,7 @@ class ProductController extends Controller
     {
         //
         $result['category'] = DB::table('categories')->where(['status'=>1])->get();
+        $result['size'] = DB::table('sizes')->get();
         return view('admin/manage_products',$result);
     }
     public function product_list()
@@ -47,7 +48,8 @@ class ProductController extends Controller
     {
     
         $result1['data'] = Product::find($id);
-        return view('admin/edit_products',$result1['data']);
+        $result['category'] = DB::table('categories')->get();
+        return view('admin/edit_products',['data'=>$result1['data'],$result]);
         
     }
     public function manage_product_update(Request $request)
@@ -61,7 +63,7 @@ class ProductController extends Controller
             $model->image = $image_name;
 
         }
-        //$model->category_id = 1;
+        $model->category_id = $request->category_id;
         $model->name = $request->name;
         $model->slug = $request->slug;
         $model->brand = $request->brand;
