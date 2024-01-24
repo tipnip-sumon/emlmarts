@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('products_attr', function (Blueprint $table) {
             $table->id();
             $table->integer('products_id');
-            $table->string('sku',255);
-            $table->string('attr_image',255);
-            $table->double('mrp',8,2);
-            $table->double('price',8,2);
-            $table->double('qty',8,2);
+            $table->string('sku');
+            $table->string('attr_image');
+            $table->integer('mrp');
+            $table->integer('price');
+            $table->integer('qty');
             $table->integer('size_id');
             $table->integer('color_id');
             $table->timestamps();

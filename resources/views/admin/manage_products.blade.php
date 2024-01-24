@@ -25,7 +25,7 @@
                 <div class="card-body">
                         <div class="mb-4">
                             <label for="name" class="form-label">Product title</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="name" name="name"  required/>
+                            <input type="text" {{old('name')}} placeholder="Type here" class="form-control" id="name" name="name"  required/>
                         </div>
                         @error('name')
                         <div class="mb-4 atert alert-danger">
@@ -34,7 +34,7 @@
                         @enderror
                         <div class="mb-4">
                             <label for="slug" class="form-label">Slug</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="slug" name="slug" required/>
+                            <input type="text" {{old('slug')}} placeholder="Type here" class="form-control" id="slug" name="slug" required/>
                         </div>
                         @error('slug')
                         <div class="mb-4 atert alert-danger">
@@ -93,37 +93,37 @@
             <div class="card-header">
                 <h4>Attibutes</h4>
             </div>
-            <div class="card mb-4" id="product_attr_box">
+            <div class="card mb-4" id="product_attr_1">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="mb-4">
                                 <label for="sku" class="form-label">SKU</label>
-                                <input type="text" placeholder="sku" class="form-control" id="sku",name="sku" />
+                                <input type="text" placeholder="sku" class="form-control" id="sku" name="sku[]" required/>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="mb-4">
                                 <label for="mrp" class="form-label">MRP</label>
-                                <input type="text" placeholder="mrp" class="form-control" id="mrp" name="mrp" />
+                                <input type="text" placeholder="mrp" class="form-control" id="mrp" name="mrp[]" required/>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="mb-4">
                                 <label for="price" class="form-label">Price</label>
-                                <input type="text" placeholder="Price" class="form-control" id="price" name="price" />
+                                <input type="text" placeholder="Price" class="form-control" id="price" name="price[]" required/>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="mb-4">
                                 <label for="attr_image" class="form-label">Image</label>
-                                <input type="file" placeholder="attr_image" class="form-control" id="attr_image",name="attr_image" />
+                                <input type="file" placeholder="attr_image" class="form-control" id="attr_image" name="attr_image[]" required/>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="mb-4">
                                 <label for="size_id" class="form-label">Size</label>
-                                <select class="form-select" id="size_id" name="size_id">
+                                <select class="form-select" id="size_id" name="size_id[]" required>
                                     <option value="">Size Select</option>
                                     @foreach ($size as $list)
                                     <option  value="{{$list->id}}">{{$list->size}}</option>
@@ -134,18 +134,23 @@
                         <div class="col-lg-4">
                             <div class="mb-4">
                                 <label for="color_id" class="form-label">Color</label>
-                                <input type="text" placeholder="color_id" class="form-control" id="color_id" name="color_id" />
+                                <select class="form-select" id="color_id" name="color_id[]" required>
+                                    <option value="">Color Select</option>
+                                    @foreach ($color as $list)
+                                    <option  value="{{$list->id}}">{{$list->color}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="mb-4">
                                 <label for="qty" class="form-label">Qty</label>
-                                <input type="text" placeholder="qty" class="form-control" id="qty" name="qty" />
+                                <input type="text" placeholder="qty" class="form-control" id="qty" name="qty[]" required/>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <button type="button" class="btn btn-primary" onclick="add_more()"><i class="text-muted material-icons md-post_add"></i>&nbsp;Add</button> 
+                        <button type="button" class="btn btn-primary" onclick=add_more()><i class="text-muted material-icons md-post_add"></i>&nbsp;Add</button> 
                     </div>
                 </div>
             </div>
@@ -268,17 +273,25 @@
 </section>
 <!-- content-main end// -->
 <script>
+    loop_count=1;
     function add_more(){
-        var html = '<div class="card mb-4"><div class="card-body"><div class="row">';
-            html+='<div class="col-lg-4"><div class="mb-4"><label for="sku" class="form-label">SKU</label><input type="text" placeholder="sku" class="form-control" id="sku",name="sku" /></div></div>';
-            html+='<div class="col-lg-4"><div class="mb-4"><label for="mrp" class="form-label">MRP</label><input type="text" placeholder="mrp" class="form-control" id="mrp" name="mrp" /></div></div>';
-            html+='<div class="col-lg-4"><div class="mb-4"><label for="price" class="form-label">Price</label><input type="text" placeholder="Price" class="form-control" id="price" name="price" /></div></div>';
-            html+='<div class="col-lg-4"><div class="mb-4"><label for="attr_image" class="form-label">Image</label><input type="file" placeholder="attr_image" class="form-control" id="attr_image",name="attr_image" /></div></div>';
-            html+='<div class="col-lg-4"><div class="mb-4"><label for="size_id" class="form-label">Size</label><select class="form-select" id="size_id" name="size_id"><option value="">Size Select</option>@foreach ($size as $list)<option  value="{{$list->id}}">{{$list->size}}</option>@endforeach</select></div></div>';
-            html+='<div class="col-lg-4"><div class="mb-4"><label for="color_id" class="form-label">Color</label><input type="text" placeholder="color_id" class="form-control" id="color_id" name="color_id" /></div></div>';
-            html+='<div class="col-lg-4"><div class="mb-4"><label for="qty" class="form-label">Qty</label><input type="text" placeholder="qty" class="form-control" id="qty" name="qty" /></div></div>';
+        loop_count++;
+        var html = '<div id="product_attr_'+loop_count+'" class="card mb-4"><div class="card-body"><div class="row">';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="sku" class="form-label">SKU</label><input type="text" placeholder="sku" class="form-control" id="sku" name="sku[]" /></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="mrp" class="form-label">MRP</label><input type="text" placeholder="mrp" class="form-control" id="mrp" name="mrp[]" /></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="price" class="form-label">Price</label><input type="text" placeholder="Price" class="form-control" id="price" name="price[]" /></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="attr_image" class="form-label">Image</label><input type="file" placeholder="attr_image" class="form-control" id="attr_image" name="attr_image[]" /></div></div>';
+            var size_id_html = jQuery('#size_id').html();
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="size_id" class="form-label">Size</label><select class="form-select" id="size_id" name="size_id[]">'+size_id_html+'</select></div></div>';
+            var color_id_html = jQuery('#color_id').html();
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="color_id" class="form-label">Color</label><select class="form-select" id="color_id" name="color_id[]">'+color_id_html+'</select></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="qty" class="form-label">Qty</label><input type="text" placeholder="qty" class="form-control" id="qty" name="qty[]" /></div></div>';
+            html+='<div class="col-lg-4"><button type="button" class="btn btn-danger" onclick=remove_more("'+loop_count+'")><i class="text-muted material-icons"></i>&nbsp;Remove</button></div>';
             html+='</div></div></div>';
-            jQuery('#product_attr_box').append(html);
+            jQuery('#product_attr_1').append(html);
+    }
+    function remove_more(loop_count){
+        jQuery('#product_attr_'+loop_count).remove();
     }
 </script>
 @endsection

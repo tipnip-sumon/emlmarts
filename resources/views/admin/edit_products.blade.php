@@ -6,6 +6,7 @@
     {{session('message')}}
     <form action="{{url('admin/edit_products')}}" method="POST" enctype="multipart/form-data">
         @csrf
+        {{-- @dd($productsAttr) --}}
         {{-- @dd($data->name) --}}
         {{-- @dd($category) --}}
     <div class="row">
@@ -91,45 +92,162 @@
                             <label class="form-label">Tax rate</label>
                             <input type="text" placeholder="%" class="form-control" id="tax" name="tax" />
                         </div>
-                        <label class="form-check mb-4">
-                            <input class="form-check-input" type="checkbox" value="" />
-                            <span class="form-check-label"> Make a template </span>
-                        </label>
                     {{-- @endforeach --}}
                 </div>
             </div>
             <!-- card end// -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h4>Shipping</h4>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-4">
-                                    <label for="product_name" class="form-label">Width</label>
-                                    <input type="text" placeholder="inch" class="form-control" id="product_name" />
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-4">
-                                    <label for="product_name" class="form-label">Height</label>
-                                    <input type="text" placeholder="inch" class="form-control" id="product_name" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label for="product_name" class="form-label">Weight</label>
-                            <input type="text" placeholder="gam" class="form-control" id="product_name" />
-                        </div>
-                        <div class="mb-4">
-                            <label for="product_name" class="form-label">Shipping fees</label>
-                            <input type="text" placeholder="$" class="form-control" id="product_name" />
-                        </div>
-                    </form>
-                </div>
+            <div class="card-header">
+                <h4>Attibutes</h4>
             </div>
+            @php
+                $loop_count_num = 1;
+            @endphp
+            @if(@empty($productsAttr[0]))
+            <input id="paid" type="hidden" name="paid[]" value="">
+                <div class="card mb-4" id="product_attr_{{$loop_count_num++}}">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="sku" class="form-label">SKU</label>
+                                    <input type="text" value="" placeholder="sku" class="form-control" id="sku" name="sku[]" required/>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="mrp" class="form-label">MRP</label>
+                                    <input type="text" value="" placeholder="mrp" class="form-control" id="mrp" name="mrp[]" required/>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="price" class="form-label">Price</label>
+                                    <input type="text" value="" placeholder="Price" class="form-control" id="price" name="price[]" required/>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="attr_image" class="form-label">Image</label>
+                                    <input type="file" placeholder="attr_image" class="form-control" id="attr_image" name="attr_image[]" required/>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="size_id" class="form-label">Size</label>
+                                    <select class="form-select" id="size_id" name="size_id[]" required>
+                                        <option value="">Size Select</option>
+                                        @foreach ($sizes as $list)
+                                        <option  value="{{$list->id}}">{{$list->size}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="color_id" class="form-label">Color</label>
+                                    <select class="form-select" id="color_id" name="color_id[]" required>
+                                        <option value="">Color Select</option>
+                                        @foreach ($colors as $list)
+                                        <option  value="{{$list->id}}">{{$list->color}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="qty" class="form-label">Qty</label>
+                                    <input type="text" value="" placeholder="qty" class="form-control" id="qty" name="qty[]" required/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <button type="button" class="btn btn-primary" onclick=add_more()><i class="text-muted material-icons md-post_add"></i>&nbsp;Add</button> 
+                        </div>
+                    </div>
+                </div>
+            @else
+            @foreach ($productsAttr as $key => $val)
+            {{-- @dd($val->id) --}}
+            @php
+                $loop_count_prev=$loop_count_num;
+            @endphp
+                <input id="paid" type="hidden" name="paid[]" value="{{$val->id}}">
+                <div class="card mb-4" id="product_attr_{{$loop_count_num++}}">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="sku" class="form-label">SKU</label>
+                                    <input type="text" value="{{$val->sku}}" placeholder="sku" class="form-control" id="sku" name="sku[]" required/>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="mrp" class="form-label">MRP</label>
+                                    <input type="text" value="{{$val->mrp}}" placeholder="mrp" class="form-control" id="mrp" name="mrp[]" required/>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="price" class="form-label">Price</label>
+                                    <input type="text" value="{{$val->price}}" placeholder="Price" class="form-control" id="price" name="price[]" required/>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="attr_image" class="form-label">Image</label>
+                                    <input type="file" placeholder="attr_image" class="form-control" id="attr_image" name="attr_image[]" required/>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="size_id" class="form-label">Size</label>
+                                    <select class="form-select" id="size_id" name="size_id[]" required>
+                                        @foreach ($sizes as $list)
+                                            @if($val->size_id==$list->id)
+                                                <option selected  value="{{$list->id}}">{{$list->size}}</option>
+                                            @else
+                                                <option value="{{$list->id}}">{{$list->size}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="color_id" class="form-label">Color</label>
+                                    <select class="form-select" id="color_id" name="color_id[]" required>
+                                        <option value="">Color Select</option>
+                                        @foreach ($colors as $list)
+                                            @if($val->color_id==$list->id)
+                                                <option selected  value="{{$list->id}}">{{$list->color}}</option>
+                                            @else
+                                                <option value="{{$list->id}}">{{$list->color}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="qty" class="form-label">Qty</label>
+                                    <input type="text" value="{{{$val->qty}}}" placeholder="qty" class="form-control" id="qty" name="qty[]" required/>
+                                </div>
+                            </div>
+                        </div>
+                        @if ($loop_count_num==2)
+                            <div class="col-lg-4">
+                                <button type="button" class="btn btn-primary" onclick=add_more()><i class="text-muted material-icons md-post_add"></i>&nbsp;Add</button> 
+                            </div>
+                        @else
+                        <div class="col-lg-4">
+                            <a href="{{url('admin/edit_products/delete')}}/{{$data->id}}/{{$val->id}}"><button type="button" class="btn btn-danger" onclick=remove_more()><i class="text-muted material-icons md-post_add"></i>&nbsp;Remove</button> </a>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+            @endif
             <!-- card end// -->
         </div>
         <div class="col-lg-6">
@@ -256,5 +374,26 @@
 </form>
 </section>
 <!-- content-main end// -->
-
+<script>
+    loop_count=1;
+    function add_more(){
+        loop_count++;
+        var html = '<input id="paid" type="hidden" name="paid[]" ><div id="product_attr_'+loop_count+'" class="card mb-4"><div class="card-body"><div class="row">';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="sku" class="form-label">SKU</label><input type="text" placeholder="sku" class="form-control" id="sku" name="sku[]" /></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="mrp" class="form-label">MRP</label><input type="text" placeholder="mrp" class="form-control" id="mrp" name="mrp[]" /></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="price" class="form-label">Price</label><input type="text" placeholder="Price" class="form-control" id="price" name="price[]" /></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="attr_image" class="form-label">Image</label><input type="file" placeholder="attr_image" class="form-control" id="attr_image" name="attr_image[]" /></div></div>';
+            var size_id_html = jQuery('#size_id').html();
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="size_id" class="form-label">Size</label><select class="form-select" id="size_id" name="size_id[]">'+size_id_html+'</select></div></div>';
+            var color_id_html = jQuery('#color_id').html();
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="color_id" class="form-label">Color</label><select class="form-select" id="color_id" name="color_id[]">'+color_id_html+'</select></div></div>';
+            html+='<div class="col-lg-4"><div class="mb-4"><label for="qty" class="form-label">Qty</label><input type="text" placeholder="qty" class="form-control" id="qty" name="qty[]" /></div></div>';
+            html+='<div class="col-lg-4"><button type="button" class="btn btn-danger" onclick=remove_more("'+loop_count+'")><i class="text-muted material-icons"></i>&nbsp;Remove</button></div>';
+            html+='</div></div></div>';
+            jQuery('#product_attr_1').append(html);
+    }
+    function remove_more(loop_count){
+        jQuery('#product_attr_'+loop_count).remove();
+    }
+</script>
 @endsection
