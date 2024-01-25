@@ -61,9 +61,11 @@
                             <div class="mb-4">
                                 <button type="submit" class="btn btn-primary w-100">Login</button>
                             </div>
-                            <div class="mb-4 atert alert-danger">
-                                {{session('errors')}}
-                            </div>
+                            @if(!empty(Session::get('errors')))
+                                <div class="mb-4 alert alert-danger">
+                                    {{Session::get('errors')}}
+                                </div>
+                            @endif
                             <!-- form-group// -->
                         </form>
                     </div>

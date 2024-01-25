@@ -4,6 +4,7 @@
 @section('container')
 <section class="content-main">
     {{session('message')}}
+    {{session('sku_error')}}
     <form action="{{url('admin/edit_products')}}" method="POST" enctype="multipart/form-data">
         @csrf
         {{-- @dd($productsAttr) --}}
@@ -103,7 +104,7 @@
                 $loop_count_num = 1;
             @endphp
             @if(@empty($productsAttr[0]))
-            <input id="paid" type="hidden" name="paid[]" value="">
+            <input id="paid" type="hidden" name="paid[]">
                 <div class="card mb-4" id="product_attr_{{$loop_count_num++}}">
                     <div class="card-body">
                         <div class="row">
@@ -167,10 +168,6 @@
                 </div>
             @else
             @foreach ($productsAttr as $key => $val)
-            {{-- @dd($val->id) --}}
-            @php
-                $loop_count_prev=$loop_count_num;
-            @endphp
                 <input id="paid" type="hidden" name="paid[]" value="{{$val->id}}">
                 <div class="card mb-4" id="product_attr_{{$loop_count_num++}}">
                     <div class="card-body">

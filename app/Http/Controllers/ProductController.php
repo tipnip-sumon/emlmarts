@@ -85,11 +85,13 @@ class ProductController extends Controller
         }
 
         $msg = "Product Updated";
-        $request->session()->flash('message',$msg);
+        session()->flash('message',$msg);
         return redirect('admin/manage_products');
     }
     public function insert(Request $request)
+    
     {
+        // dd($request);
         $request->validate([
             'category_id'=>'required',
             'name'=>'required',
@@ -120,6 +122,7 @@ class ProductController extends Controller
         $pid = $model->id;
 
         $skuArr = $request->post('sku');
+        $paidArr=$request->post('paid');
         $attr_imageArr = $request->post('attr_image');
         $mrpArr = $request->post('mrp');
         $priceArr = $request->post('price');
@@ -139,12 +142,21 @@ class ProductController extends Controller
             $productAttrArr['color_id']=$color_idArr[$key];
             $productAttrArr['created_at']=now();
             $productAttrArr['updated_at']=now();
+            $check=DB::table('products_attr')
+                    ->where('sku','=',$skuArr[$key])
+                    ->where('id','!=',$paidArr[$key])
+                    ->get();
+                            
+            if(isset($check[0])){
+                session()->flash('sku_error',$skuArr[$key].' Sku Already Used!');
+                return redirect(request()->headers->get('referer'));
+            }
             DB::table('products_attr')->insert($productAttrArr);
         }
         
         
         $msg = "Product Inserted";
-        $request->session()->flash('message',$msg);
+        session()->flash('message',$msg);
         //$result['category'] = DB::table('categories')->where(['status'=>1])->get();
         return redirect('admin/product');
     }
@@ -152,14 +164,14 @@ class ProductController extends Controller
     {
         $model = Product::find($id);
         $model->delete();
-        $request->session()->flash('message','Product Deleted');
+        session()->flash('message','Product Deleted');
         return redirect('admin/product');
     }
     
     public function attr_delete(Request $request,$id,$pid)
     {
         DB::table('products_attr')->where(['id'=>$pid])->delete();
-        $request->session()->flash('message','Product Attr Deleted');
+        session()->flash('message','Product Attr Deleted');
         return redirect('admin/edit_products/'.$id);
     }
     public function status(Request $request,$status,$id)
@@ -167,7 +179,7 @@ class ProductController extends Controller
         $model = Product::find($id);
         $model->status = $status;
         $model->save();
-        $request->session()->flash('message','Status Changed');
+        session()->flash('message','Status Changed');
         return redirect('admin/Product');
     }
 }

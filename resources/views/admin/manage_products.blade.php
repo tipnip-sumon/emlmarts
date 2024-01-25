@@ -4,7 +4,16 @@
 @section('container')
 
 <section class="content-main">
-    {{session('message')}}
+    @if(!empty(Session::get('message'))) 
+        <div class="mb-4 alert alert-success">
+            {{ Session::get('message')}}
+        </div> 
+    @endif
+    @if(!empty(Session::get('sku_error'))) 
+        <div class="mb-4 alert alert-danger">
+            {{ Session::get('sku_error')}}
+        </div> 
+    @endif
     <form action="{{route('admin.insert4')}}" method="POST" enctype="multipart/form-data">
         @csrf
     <div class="row">
@@ -25,7 +34,7 @@
                 <div class="card-body">
                         <div class="mb-4">
                             <label for="name" class="form-label">Product title</label>
-                            <input type="text" {{old('name')}} placeholder="Type here" class="form-control" id="name" name="name"  required/>
+                            <input type="text" value="{{old('name')}}" placeholder="Type here" class="form-control" id="name" name="name"  required/>
                         </div>
                         @error('name')
                         <div class="mb-4 atert alert-danger">
@@ -93,6 +102,7 @@
             <div class="card-header">
                 <h4>Attibutes</h4>
             </div>
+            <input id="paid" type="hidden" name="paid[]">
             <div class="card mb-4" id="product_attr_1">
                 <div class="card-body">
                     <div class="row">
@@ -276,7 +286,7 @@
     loop_count=1;
     function add_more(){
         loop_count++;
-        var html = '<div id="product_attr_'+loop_count+'" class="card mb-4"><div class="card-body"><div class="row">';
+        var html = '<input id="paid" type="hidden" name="paid[]"><div id="product_attr_'+loop_count+'" class="card mb-4"><div class="card-body"><div class="row">';
             html+='<div class="col-lg-4"><div class="mb-4"><label for="sku" class="form-label">SKU</label><input type="text" placeholder="sku" class="form-control" id="sku" name="sku[]" /></div></div>';
             html+='<div class="col-lg-4"><div class="mb-4"><label for="mrp" class="form-label">MRP</label><input type="text" placeholder="mrp" class="form-control" id="mrp" name="mrp[]" /></div></div>';
             html+='<div class="col-lg-4"><div class="mb-4"><label for="price" class="form-label">Price</label><input type="text" placeholder="Price" class="form-control" id="price" name="price[]" /></div></div>';
