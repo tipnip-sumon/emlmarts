@@ -58,7 +58,7 @@ class ProductController extends Controller
         $pid = $model->id;
         $paidArr=$request->post('paid');
         $skuArr = $request->sku;
-        $attr_imageArr = $request->attr_image;
+        // $attr_imageArr = $request->attr_image;
         $mrpArr = $request->mrp;
         $priceArr = $request->price;
         $qtyArr = $request->qty;
@@ -67,7 +67,6 @@ class ProductController extends Controller
         foreach($skuArr as $key => $val){
             $productAttrArr['products_id']=$pid;
             $productAttrArr['sku']=$skuArr[$key];
-            $productAttrArr['attr_image']='test';
             $productAttrArr['mrp']=$mrpArr[$key];
             $productAttrArr['price']=$priceArr[$key];
             $productAttrArr['qty']=$qtyArr[$key];
@@ -75,6 +74,16 @@ class ProductController extends Controller
             $productAttrArr['color_id']=$color_idArr[$key];
             $productAttrArr['created_at']=now();
             $productAttrArr['updated_at']=now();
+
+            if($request->hasFile("attr_image.$key")){
+                $rand = rand('111111111','999999999');
+                $attr_image = $request->file("attr_image.$key");
+                $ext=$attr_image->extension();
+                $image_name = $rand.'.'.$ext;
+                // $image_name = time().'.'.$ext;
+                $attr_image->storeAs('/public/media',$image_name);
+                $productAttrArr['attr_image'] = $image_name;
+            }
             $res = DB::table('products_attr')->where(['id'=>$paidArr[$key]])->exists();
             if($res){
                 DB::table('products_attr')->where(['id'=>$paidArr[$key]])->update($productAttrArr);
@@ -84,7 +93,7 @@ class ProductController extends Controller
             
         }
 
-        $msg = "Product Updated";
+        $msg = "Product Attributes Updated";
         session()->flash('message',$msg);
         return redirect('admin/manage_products');
     }
@@ -96,13 +105,17 @@ class ProductController extends Controller
             'category_id'=>'required',
             'name'=>'required',
             'image'=>'required|mimes:jpg,jpeg,png',
-            'slug'=>'required|unique:products'
+            'slug'=>'required|unique:products',
+            'attr_image.*' => 'required|mimes:jpg,jpeg,png'
+
         ]);
         $model = new Product();
         if($request->hasfile('image')){
+            $rand = rand('111111111','999999999');
             $image=$request->file('image');
             $ext = $image->extension();
-            $image_name = time().'.'.$ext;
+            $image_name = $rand.'.'.$ext;
+            // $image_name = time().'.'.$ext;
             $image->storeAs('/public/media',$image_name);
             $model->image = $image_name;
         }
@@ -133,8 +146,6 @@ class ProductController extends Controller
         foreach($skuArr as $key => $val){
             $productAttrArr['products_id']=$pid;
             $productAttrArr['sku']=$skuArr[$key];
-            $productAttrArr['attr_image']='test';
-            // $productAttrArr['attr_image']=$skuArr[$key];
             $productAttrArr['mrp']=$mrpArr[$key];
             $productAttrArr['price']=$priceArr[$key];
             $productAttrArr['qty']=$qtyArr[$key];
@@ -142,6 +153,19 @@ class ProductController extends Controller
             $productAttrArr['color_id']=$color_idArr[$key];
             $productAttrArr['created_at']=now();
             $productAttrArr['updated_at']=now();
+
+            if($request->hasFile("attr_image.$key")){
+                $rand = rand('111111111','999999999');
+                $attr_image = $request->file("attr_image.$key");
+                $ext=$attr_image->extension();
+                $image_name = $rand.'.'.$ext;
+                // $image_name = time().'.'.$ext;
+                $attr_image->storeAs('/public/media',$image_name);
+                $productAttrArr['attr_image'] = $image_name;
+            }else{
+                $productAttrArr['attr_image'] = "";
+            }
+
             $check=DB::table('products_attr')
                     ->where('sku','=',$skuArr[$key])
                     ->where('id','!=',$paidArr[$key])
@@ -155,12 +179,11 @@ class ProductController extends Controller
         }
         
         
-        $msg = "Product Inserted";
+        $msg = "Product Information Inserted";
         session()->flash('message',$msg);
-        //$result['category'] = DB::table('categories')->where(['status'=>1])->get();
         return redirect('admin/product');
     }
-    public function delete(Request $request,$id)
+    public function delete($id)
     {
         $model = Product::find($id);
         $model->delete();
@@ -168,13 +191,13 @@ class ProductController extends Controller
         return redirect('admin/product');
     }
     
-    public function attr_delete(Request $request,$id,$pid)
+    public function attr_delete($id,$pid)
     {
         DB::table('products_attr')->where(['id'=>$pid])->delete();
         session()->flash('message','Product Attr Deleted');
         return redirect('admin/edit_products/'.$id);
     }
-    public function status(Request $request,$status,$id)
+    public function status($status,$id)
     {
         $model = Product::find($id);
         $model->status = $status;

@@ -4,7 +4,11 @@
 @section('container')
 
 <section class="content-main">
-    {{session('message')}}
+    @if(!empty(Session::get('message'))) 
+        <div class="mb-4 alert alert-success">
+            {{ Session::get('message')}}
+        </div> 
+    @endif
     <div class="content-header">
         <div>
             <h2 class="content-title card-title">Products List</h2>
@@ -50,7 +54,7 @@
                     @foreach ($data as $show)
                     <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
                         <a class="itemside" href="#">
-                            <div class="left">
+                            <div class="left" style="height: 52px; width:52px">
                                 <img src="{{asset('storage/media/'.$show->image)}}"  alt="Item" />
                             </div>
                             <div class="info">

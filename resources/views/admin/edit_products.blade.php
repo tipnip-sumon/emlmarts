@@ -193,13 +193,15 @@
                             <div class="col-lg-4">
                                 <div class="mb-4">
                                     <label for="attr_image" class="form-label">Image</label>
-                                    <input type="file" placeholder="attr_image" class="form-control" id="attr_image" name="attr_image[]" required/>
+                                    <img src="{{asset('storage/media/'. $data->image)}}" alt="" />
+                                    <input type="file" class="form-control" id="attr_image" name="attr_image[]"/>
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="mb-4">
                                     <label for="size_id" class="form-label">Size</label>
                                     <select class="form-select" id="size_id" name="size_id[]" required>
+                                        <option value="">Size Select</option>
                                         @foreach ($sizes as $list)
                                             @if($val->size_id==$list->id)
                                                 <option selected  value="{{$list->id}}">{{$list->size}}</option>
@@ -381,8 +383,10 @@
             html+='<div class="col-lg-4"><div class="mb-4"><label for="price" class="form-label">Price</label><input type="text" placeholder="Price" class="form-control" id="price" name="price[]" /></div></div>';
             html+='<div class="col-lg-4"><div class="mb-4"><label for="attr_image" class="form-label">Image</label><input type="file" placeholder="attr_image" class="form-control" id="attr_image" name="attr_image[]" /></div></div>';
             var size_id_html = jQuery('#size_id').html();
+                size_id_html = size_id_html.replace("selected","");
             html+='<div class="col-lg-4"><div class="mb-4"><label for="size_id" class="form-label">Size</label><select class="form-select" id="size_id" name="size_id[]">'+size_id_html+'</select></div></div>';
             var color_id_html = jQuery('#color_id').html();
+                color_id_html = color_id_html.replace("selected","");
             html+='<div class="col-lg-4"><div class="mb-4"><label for="color_id" class="form-label">Color</label><select class="form-select" id="color_id" name="color_id[]">'+color_id_html+'</select></div></div>';
             html+='<div class="col-lg-4"><div class="mb-4"><label for="qty" class="form-label">Qty</label><input type="text" placeholder="qty" class="form-control" id="qty" name="qty[]" /></div></div>';
             html+='<div class="col-lg-4"><button type="button" class="btn btn-danger" onclick=remove_more("'+loop_count+'")><i class="text-muted material-icons"></i>&nbsp;Remove</button></div>';
