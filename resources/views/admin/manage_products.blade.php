@@ -27,6 +27,7 @@
             </div>
         </div>
         <div class="col-lg-6">
+            <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
             <div class="card mb-4">
                 <div class="card-header">
                     <h4>Basic</h4>
@@ -240,7 +241,12 @@
                         </div>
                         <div class="mb-4">
                             <label for="brand" class="form-label">Brand</label>
-                            <input type="text" value="{{old('brand')}}" placeholder="Type here" class="form-control" id="brand" name="brand"  />
+                            <select class="form-select" id="brand" name="brand">
+                                <option value="">Brand Select</option>
+                                @foreach ($brand as $list)
+                                <option  value="{{$list->id}}" {{ (old("brand") == $list->id ? "selected":"") }}>{{$list->brand_name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         @error('brand')
                         <div class="mb-4 atert alert-danger">
@@ -344,5 +350,8 @@
     function remove_image_more(loop_image_count){
         jQuery('#product_image_'+loop_image_count).remove();
     }
+    CKEDITOR.replace('short_desc');
+    CKEDITOR.replace('full_desc');
+    CKEDITOR.replace('technical_spceification');
 </script>
 @endsection

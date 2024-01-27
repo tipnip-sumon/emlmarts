@@ -15,6 +15,7 @@ class ProductController extends Controller
         $result['category'] = DB::table('categories')->where(['status'=>1])->get();
         $result['size'] = DB::table('sizes')->where(['status'=>1])->get();
         $result['color'] = DB::table('colors')->where(['status'=>1])->get();
+        $result['brand'] = DB::table('brands')->where(['is_home'=>1])->where(['status'=>1])->get();
         return view('admin/manage_products',$result);
     }
     public function product_list()
