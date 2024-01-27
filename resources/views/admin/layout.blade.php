@@ -43,6 +43,15 @@
                         <div class="submenu">
                             <a href="{{url('admin/category')}}">Categories</a>
                             <a href="{{url('admin/sub_category')}}">Sub Categories</a>
+                        </div>
+                    </li>
+                    
+                    <li class="menu-item has-submenu @yield('brand_active')">
+                        <a class="menu-link" href="page-products-list.html">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Brand</span>
+                        </a>
+                        <div class="submenu">
                             <a href="{{url('admin/brand')}}">Brands</a>
                             
                         </div>

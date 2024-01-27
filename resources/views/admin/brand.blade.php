@@ -1,6 +1,6 @@
 @extends('admin/layout')
 @section('page_title','Brand')
-@section('cat_active','active')
+@section('brand_active','active')
 @section('container')
 <section class="content-main">
     {{session('message')}}

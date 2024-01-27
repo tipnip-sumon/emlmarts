@@ -87,6 +87,7 @@ Route::group(['middleware'=>'admin_auth'],function(){
     Route::post('admin/insert4',[ProductController::class,'insert'])->name('admin.insert4');
     Route::get('admin/product/delete/{id}',[ProductController::class,'delete']);
     Route::get('admin/edit_products/delete/{id}/{pid}',[ProductController::class,'attr_delete']);
+    Route::get('admin/edit_products_image/delete/{id}/{pid}',[ProductController::class,'image_delete']);
     Route::get('admin/product/status/{status}/{id}',[ProductController::class,'status']);
     Route::get('admin/product/status/{status}/{id}',[ProductController::class,'status_list']);
     Route::get('admin/logout',function(){

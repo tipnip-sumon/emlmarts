@@ -7,9 +7,6 @@
     {{session('sku_error')}}
     <form action="{{url('admin/edit_products')}}" method="POST" enctype="multipart/form-data">
         @csrf
-        {{-- @dd($productsAttr) --}}
-        {{-- @dd($data->name) --}}
-        {{-- @dd($category) --}}
     <div class="row">
         <div class="col-9">
             <div class="content-header">
@@ -96,6 +93,58 @@
                     {{-- @endforeach --}}
                 </div>
             </div>
+            <div class="card-header">
+                <h4>Product Images</h4>
+            </div>
+            @php
+                $loop_image_count = 1;
+            @endphp
+            @if(@empty($productImagesArr[0]))
+            <input id="piid" type="hidden" name="piid[]">
+                <div class="card mb-4" id="product_image_{{$loop_image_count++}}">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="images" class="form-label">Image</label>
+                                    <input type="file" placeholder="images" class="form-control" id="images" name="images[]"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <button type="button" class="btn btn-primary" onclick=add_image_more()><i class="text-muted material-icons md-post_add"></i>&nbsp;Add</button> 
+                        </div>
+                    </div>
+                </div>
+            @else
+            @foreach ($productImagesArr as $key => $val)
+            <input id="piid" type="hidden" name="piid[]" value="{{$val->id}}">
+                <div class="card mb-4" id="product_image_{{$loop_image_count++}}">
+                    <div class="card-body">
+                        <div class="row">
+                            
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label for="images" class="form-label">Image</label>
+                                    <a href="{{asset('storage/media/'. $val->images)}}" target="_blank" rel="noopener noreferrer"><img src="{{asset('storage/media/'. $val->images)}}" alt="" style="height: 52px;width:52px"/></a>
+                                    
+                                    <input type="file" class="form-control" id="images" name="images[]"/>
+                                </div>
+                            </div>
+                        </div>
+                        @if ($loop_image_count==2)
+                            <div class="col-lg-4">
+                                <button type="button" class="btn btn-primary" onclick=add_image_more()><i class="text-muted material-icons md-post_add"></i>&nbsp;Add</button> 
+                            </div>
+                        @else
+                        <div class="col-lg-4">
+                            <a href="{{url('admin/edit_products_image/delete')}}/{{$data->id}}/{{$val->id}}"><button type="button" class="btn btn-danger" onclick=remove_image_more()><i class="text-muted material-icons md-post_add"></i>&nbsp;Remove</button> </a>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+            @endif
             <!-- card end// -->
             <div class="card-header">
                 <h4>Attibutes</h4>
@@ -193,7 +242,7 @@
                             <div class="col-lg-4">
                                 <div class="mb-4">
                                     <label for="attr_image" class="form-label">Image</label>
-                                    <img src="{{asset('storage/media/'. $data->image)}}" alt="" />
+                                    <img src="{{asset('storage/media/'. $val->attr_image)}}" alt="" style="height: 52px;width:52px"/>
                                     <input type="file" class="form-control" id="attr_image" name="attr_image[]"/>
                                 </div>
                             </div>
@@ -395,6 +444,19 @@
     }
     function remove_more(loop_count){
         jQuery('#product_attr_'+loop_count).remove();
+    }
+    loop_image_count = 1;
+    function add_image_more(){
+        loop_image_count++;
+        var html = '<input id="piid" type="hidden" name="piid[]" value="'+loop_image_count+'"><div id="product_image_'+loop_image_count+'" class="card mb-4"><div class="card-body"><div class="row">';
+        
+        html+='<div class="col-lg-4"><div class="mb-4"><label for="attr_image" class="form-label">Image</label><input type="file" placeholder="images" class="form-control" id="images" name="images[]" /></div></div>';
+        html+='<div class="col-lg-4"><button type="button" class="btn btn-danger" onclick=remove_image_more('+loop_image_count+')><i class="text-muted material-icons"></i>&nbsp;Remove</button></div>';
+        html+='</div></div></div>';
+        jQuery('#product_image_1').append(html);
+    }
+    function remove_image_more(loop_image_count){
+        jQuery('#product_image_'+loop_image_count).remove();
     }
 </script>
 @endsection

@@ -26,11 +26,9 @@ class BrandController extends Controller
     public function manage_brand_update(Request $request)
     {
         $request->validate([
-            'brand_name'=>'required|unique:brands',
-            'image'=>'required|mimes:jpg,jpeg,png',
+            'image'=>'mimes:jpg,jpeg,png'
         ]);
        
-        // $model = new Brand();
         $model = Brand::find($request->id);
 
         if($request->hasfile('image')){
@@ -41,15 +39,12 @@ class BrandController extends Controller
             $model->brand_image = $image_name;
         }
 
-        // $model = Brand::find($request->id);
         $model->brand_name = $request->brand_name;
         $model->is_home = 1;
-        // $model->is_home = $request->is_home;
         $model->status = 1;
-        // $model->status = $request->status;
         $model->save();
         $msg = "Brand Updated";
-        $request->session()->flash('message',$msg);
+        session()->flash('message',$msg);
         return redirect('admin/brand');
     }
 
@@ -73,21 +68,17 @@ class BrandController extends Controller
         $model->brand_name = $request->post('brand_name');
         $model->is_home = $request->post('is_home');
         $model->status = 1;
-        // $model->status = $request->post('status');
 
         $model->save();
         $msg = "Brand Successfully Inserted";
-        $request->session()->flash('message',$msg);
+        session()->flash('message',$msg);
         return redirect('admin/brand');
     }
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function delete(Request $request,$id)
     {
         $model = Brand::find($id);
         $model->delete();
-        $request->session()->flash('message','Brand Deleted');
+        session()->flash('message','Brand Deleted');
         return redirect('admin/brand');
     }
     public function status(Request $request,$status,$id)
@@ -95,7 +86,7 @@ class BrandController extends Controller
         $model = Brand::find($id);
         $model->status = $status;
         $model->save();
-        $request->session()->flash('message','Status Changed');
+        session()->flash('message','Status Changed');
         return redirect('admin/brand');
     }
     public function edit(Brand $Brand,$id)

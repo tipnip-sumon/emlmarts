@@ -98,6 +98,30 @@
                         </div>
                 </div>
             </div>
+            <div class="card-header">
+                <h4>Product Images</h4>
+            </div>
+            <input id="piid" type="hidden" name="piid[]">
+            <div class="card mb-4" id="product_image_1">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="mb-4">
+                                <label for="images" class="form-label">Image</label>
+                                <input type="file" value="{{old('images.0')}}" placeholder="images" class="form-control" id="images" name="images[]" required/>
+                            </div>
+                        </div>
+                        @error('images.*')
+                        <div class="mb-4 atert alert-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col-lg-4">
+                        <button type="button" class="btn btn-primary" onclick=add_image_more()><i class="text-muted material-icons md-post_add"></i>&nbsp;Add</button> 
+                    </div>
+                </div>
+            </div>
             <!-- card end// -->
             <div class="card-header">
                 <h4>Attibutes</h4>
@@ -307,6 +331,18 @@
     }
     function remove_more(loop_count){
         jQuery('#product_attr_'+loop_count).remove();
+    }
+    loop_image_count = 1;
+    function add_image_more(){
+        loop_image_count++;
+        var html = '<input id="piid" type="hidden" name="piid[]"><div id="product_image_'+loop_image_count+'" class="card mb-4"><div class="card-body"><div class="row">';
+        html+='<div class="col-lg-4"><div class="mb-4"><label for="attr_image" class="form-label">Image</label><input type="file" placeholder="attr_image" class="form-control" id="attr_image" name="attr_image[]" /></div></div>';
+        html+='<div class="col-lg-4"><button type="button" class="btn btn-danger" onclick=remove_image_more('+loop_image_count+')><i class="text-muted material-icons"></i>&nbsp;Remove</button></div>';
+        html+='</div></div></div>';
+        jQuery('#product_image_1').append(html);
+    }
+    function remove_image_more(loop_image_count){
+        jQuery('#product_image_'+loop_image_count).remove();
     }
 </script>
 @endsection

@@ -29,7 +29,8 @@ class ProductController extends Controller
         $result2 = DB::table('products_attr')->where('products_id','=',$id)->get();
         $result3 = DB::table('sizes')->where(['status'=>1])->get();
         $result4 = DB::table('colors')->where(['status'=>1])->get();
-        return view('admin/edit_products',['data'=>$result1['data'],'category'=>$result,'productsAttr'=>$result2,'sizes'=>$result3,'colors'=>$result4]);
+        $result5 = DB::table('product_images')->where(['products_id'=>$id])->get();
+        return view('admin/edit_products',['data'=>$result1['data'],'category'=>$result,'productsAttr'=>$result2,'sizes'=>$result3,'colors'=>$result4,'productImagesArr'=>$result5]);
     }
     public function manage_product_update(Request $request)
     {
@@ -57,6 +58,7 @@ class ProductController extends Controller
         $model->save();
         $pid = $model->id;
         $paidArr=$request->post('paid');
+        // dd($paidArr);
         $skuArr = $request->sku;
         // $attr_imageArr = $request->attr_image;
         $mrpArr = $request->mrp;
@@ -92,6 +94,26 @@ class ProductController extends Controller
             }
             
         }
+        $piidArr=$request->post('piid');
+        // dd($piidArr);
+        foreach($piidArr  as $key => $val){
+            $productImageArr['products_id'] = $pid;
+            if($request->hasfile("images.$key")){
+                $rand = rand('111111111','999999999');
+                $attr_image = $request->file("images.$key");
+                $ext=$attr_image->extension();
+                $image_name = $rand.'.'.$ext;
+                $attr_image->storeAs('/public/media',$image_name);
+                $productImageArr['images'] = $image_name;
+            }
+            
+            $res = DB::table('product_images')->where(['id'=>$piidArr[$key]])->exists();
+            if($res){
+                DB::table('product_images')->where(['id'=>$piidArr[$key]])->update($productImageArr);
+            }else{
+                DB::table('product_images')->insert($productImageArr);
+            }
+        }
 
         $msg = "Product Attributes Updated";
         session()->flash('message',$msg);
@@ -106,7 +128,8 @@ class ProductController extends Controller
             'name'=>'required',
             'image'=>'required|mimes:jpg,jpeg,png',
             'slug'=>'required|unique:products',
-            'attr_image.*' => 'required|mimes:jpg,jpeg,png'
+            'attr_image.*' => 'required|mimes:jpg,jpeg,png',
+            'images.*' => 'required|mimes:jpg,jpeg,png'
 
         ]);
         $model = new Product();
@@ -165,18 +188,30 @@ class ProductController extends Controller
             }else{
                 $productAttrArr['attr_image'] = "";
             }
-
-            $check=DB::table('products_attr')
-                    ->where('sku','=',$skuArr[$key])
-                    ->where('id','!=',$paidArr[$key])
-                    ->get();
-                            
+            $check=DB::table('products_attr')->where('sku','=',$skuArr[$key])->where('id','!=',$paidArr[$key])->get();          
             if(isset($check[0])){
                 session()->flash('sku_error',$skuArr[$key].' Sku Already Used!');
                 return redirect(request()->headers->get('referer'));
             }
             DB::table('products_attr')->insert($productAttrArr);
         }
+        
+        $piidArr=$request->post('piid');
+        foreach($piidArr  as $key => $val){
+            $productImageArr['products_id'] = $pid;
+            $productImageArr['created_at'] = now();
+            $productImageArr['updated_at'] = now();
+            if($request->hasFile("images.$key")){
+                $rand = rand('111111111','999999999');
+                $attr_image = $request->file("images.$key");
+                $ext=$attr_image->extension();
+                $image_name = $rand.'.'.$ext;
+                $attr_image->storeAs('/public/media',$image_name);
+                $productImageArr['images'] = $image_name;
+            }
+            DB::table('product_images')->insert($productImageArr);
+        }
+        
         
         
         $msg = "Product Information Inserted";
@@ -195,6 +230,12 @@ class ProductController extends Controller
     {
         DB::table('products_attr')->where(['id'=>$pid])->delete();
         session()->flash('message','Product Attr Deleted');
+        return redirect('admin/edit_products/'.$id);
+    }
+    public function image_delete($id,$pid)
+    {
+        DB::table('product_images')->where(['id'=>$pid])->delete();
+        session()->flash('message','Product Image Deleted');
         return redirect('admin/edit_products/'.$id);
     }
     public function status($status,$id)
