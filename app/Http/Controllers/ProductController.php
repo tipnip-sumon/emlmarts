@@ -160,7 +160,6 @@ class ProductController extends Controller
 
         $skuArr = $request->post('sku');
         $paidArr=$request->post('paid');
-        $attr_imageArr = $request->post('attr_image');
         $mrpArr = $request->post('mrp');
         $priceArr = $request->post('price');
         $qtyArr = $request->post('qty');
@@ -170,9 +169,9 @@ class ProductController extends Controller
         foreach($skuArr as $key => $val){
             $productAttrArr['products_id']=$pid;
             $productAttrArr['sku']=$skuArr[$key];
-            $productAttrArr['mrp']=$mrpArr[$key];
-            $productAttrArr['price']=$priceArr[$key];
-            $productAttrArr['qty']=$qtyArr[$key];
+            $productAttrArr['mrp']= (int) $mrpArr[$key];
+            $productAttrArr['price']= (int) $priceArr[$key];
+            $productAttrArr['qty']= (int) $qtyArr[$key];
             $productAttrArr['size_id']=$size_idArr[$key];
             $productAttrArr['color_id']=$color_idArr[$key];
             $productAttrArr['created_at']=now();

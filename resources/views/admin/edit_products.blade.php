@@ -19,6 +19,7 @@
         </div>
         
         <div class="col-lg-6">
+            <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
             <div class="card mb-4">
                 <div class="card-header">
                     <h4>Basic</h4>
@@ -378,7 +379,7 @@
                         @enderror
                         <div class="mb-4">
                             <label for="technical_spceification" class="form-label">Technical Spacipication</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="technical_spceification" name="technical_spceification" value="{{$data->technical_spceification}}"/>
+                            <textarea  type="text" placeholder="Type here" class="form-control" id="technical_spceification" name="technical_spceification" value="{{ $data->technical_spceification}}">{{ $data->technical_spceification}}</textarea>
                         </div>
                         @error('technical_spceification')
                         <div class="mb-4 atert alert-danger">
@@ -458,5 +459,8 @@
     function remove_image_more(loop_image_count){
         jQuery('#product_image_'+loop_image_count).remove();
     }
+    CKEDITOR.replace('short_desc');
+    CKEDITOR.replace('full_desc');
+    CKEDITOR.replace('technical_spceification');
 </script>
 @endsection

@@ -273,7 +273,7 @@
                         @enderror
                         <div class="mb-4">
                             <label for="technical_spceification" class="form-label">Technical Spacipication</label>
-                            <input type="text" value="{{old('technical_spceification')}}" placeholder="Type here" class="form-control" id="technical_spceification" name="technical_spceification" />
+                            <textarea placeholder="Type here" class="form-control" id="technical_spceification" name="technical_spceification">{{ old('technical_spceification') }}</textarea>
                         </div>
                         @error('technical_spceification')
                         <div class="mb-4 atert alert-danger">
