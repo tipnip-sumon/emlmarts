@@ -69,34 +69,6 @@
                             {{$message}}
                         </div>
                         @enderror
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="mb-4">
-                                    <label class="form-label">Regular price</label>
-                                    <div class="row gx-2">
-                                        <input placeholder="$" value="{{old('reg_price')}}" type="text" class="form-control" id="reg_price" name="reg_price" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="mb-4">
-                                    <label class="form-label">Promotional price</label>
-                                    <input placeholder="$" value="{{old('pro_price')}}" type="text" class="form-control" id="pro_price" name="pro_price"/>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <label class="form-label">Currency</label>
-                                <select class="form-select">
-                                    <option>USD</option>
-                                    <option>EUR</option>
-                                    <option>RUBL</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">Tax rate</label>
-                            <input type="text" value="{{old('tax')}}" placeholder="%" class="form-control" id="tax" name="tax" />
-                        </div>
                 </div>
             </div>
             <div class="card-header">
@@ -298,6 +270,68 @@
                             {{$message}}
                         </div>
                         @enderror
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Lead Time</label>
+                                    <div class="row gx-2">
+                                        <input placeholder="Type here" value="{{old('lead_time')}}" type="text" class="form-control" id="lead_time" name="lead_time" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Tax</label>
+                                    <input placeholder="Type here" value="{{old('tax')}}" type="text" class="form-control" id="tax" name="tax"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label">Tax Type</label>
+                                <input placeholder="Type here" value="{{old('tax_type')}}" type="text" class="form-control" id="tax_type" name="tax_type"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="mb-4">
+                                    <label class="form-label">Is Promo</label>
+                                    <div class="row gx-2">
+                                        <select class="form-select" id="is_promo" name="is_promo">
+                                            <option value="1">Yes</option>
+                                            <option  value="0" >No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="mb-4">
+                                    <label class="form-label">Is Featured</label>
+                                    <div class="row gx-2">
+                                        <select class="form-select" id="is_featured" name="is_featured">
+                                            <option value="1">Yes</option>
+                                            <option  value="0" >No</option>
+                                        </select>
+                                    </div>
+                               </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">Is Discounted</label>
+                                <div class="row gx-2">
+                                    <select class="form-select" id="is_discounted" name="is_discounted">
+                                        <option value="1">Yes</option>
+                                        <option  value="0" >No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">Is Tranding</label>
+                                <div class="row gx-2">
+                                    <select class="form-select" id="is_tranding" name="is_tranding">
+                                        <option value="1">Yes</option>
+                                        <option  value="0" >No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="mb-4">
                             <label for="tag" class="form-label">Tags</label>
                             <input type="text" value="{{old('tag')}}" class="form-control" id="tag" name="tag" />
