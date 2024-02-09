@@ -403,7 +403,88 @@
                         <div class="mb-4 atert alert-danger">
                             {{$message}}
                         </div>
-                        @enderror
+                        @enderror<div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Lead Time</label>
+                                    <div class="row gx-2">
+                                        <input placeholder="Type here" value="{{$data->lead_time}}" type="text" class="form-control" id="lead_time" name="lead_time" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Tax</label>
+                                    <input placeholder="Type here" value="{{$data->tax}}" type="text" class="form-control" id="tax" name="tax"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <label class="form-label">Tax Type</label>
+                                <input placeholder="Type here" value="{{$data->tax_type}}" type="text" class="form-control" id="tax_type" name="tax_type"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="mb-4">
+                                    <label class="form-label">Is Promo</label>
+                                    <div class="row gx-2">
+                                        <select class="form-select" id="is_promo" name="is_promo">
+                                            @if($data->is_promo==1)
+                                                <option selected value="1">Yes</option>
+                                                <option  value="0" >No</option>
+                                            @else
+                                                <option  value="1">Yes</option>
+                                                <option selected value="0" >No</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="mb-4">
+                                    <label class="form-label">Is Featured</label>
+                                    <div class="row gx-2">
+                                        <select class="form-select" id="is_featured" name="is_featured">
+                                            @if($data->is_featured==1)
+                                                <option selected value="1">Yes</option>
+                                                <option  value="0" >No</option>
+                                            @else
+                                                <option value="1">Yes</option>
+                                                <option selected value="0" >No</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                               </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">Is Discounted</label>
+                                <div class="row gx-2">
+                                    <select class="form-select" id="is_discounted" name="is_discounted">
+                                        @if($data->is_discounted==1)
+                                            <option selected value="1">Yes</option>
+                                            <option  value="0" >No</option>
+                                        @else
+                                            <option value="1">Yes</option>
+                                            <option selected value="0" >No</option>
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">Is Tranding</label>
+                                <div class="row gx-2">
+                                    <select class="form-select" id="is_tranding" name="is_tranding">
+                                        @if($data->is_tranding==1)
+                                            <option selected value="1">Yes</option>
+                                            <option  value="0" >No</option>
+                                        @else
+                                            <option value="1">Yes</option>
+                                            <option selected value="0" >No</option>
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="mb-4">
                             <label for="tag" class="form-label">Tags</label>
                             <input type="text" class="form-control" id="tag" name="tag" />

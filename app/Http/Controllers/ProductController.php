@@ -54,6 +54,13 @@ class ProductController extends Controller
         $model->technical_spceification = $request->technical_spceification;
         $model->uses = $request->uses;
         $model->warranty = $request->warranty;
+        $model->lead_time = $request->lead_time;
+        $model->tax = $request->tax;
+        $model->tax_type = $request->tax_type;
+        $model->is_promo = $request->is_promo;
+        $model->is_featured = $request->is_featured;
+        $model->is_discounted = $request->is_discounted;
+        $model->is_tranding = $request->is_tranding;
         $model->status = 1;
         $model->id = $request->post('id');
         $model->save();
