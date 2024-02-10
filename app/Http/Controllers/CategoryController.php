@@ -4,48 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
         $result['data'] = Category::all();
         return view('admin/category',$result);
     }
     public function product_list()
     {
-        //
         return view('admin/products-list');
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function manage_category($id)
     {
     
         $result['data'] = Category::find($id);
-        return view('admin/manage_category',$result['data']);
+        $result['category'] = DB::table('categories')->where(['status'=>1])->where('id','!=',$id)->get();
+        return view('admin/manage_category',$result);
         
     }
     public function manage_category_update(Request $request)
@@ -54,11 +31,13 @@ class CategoryController extends Controller
         $model->category_name = $request->category_name;
         $model->category_description = $request->category_description;
         $model->category_slug = $request->category_slug;
+        $model->parent_category_id = $request->parent_category_id;
         $model->category_order = $request->category_order;
-        $model->status=0;
+        $model->is_home = $request->is_home;
+        $model->status=$request->status;
         $model->save();
         $msg = "Category Updated";
-        $request->session()->flash('message',$msg);
+        session()->flash('message',$msg);
         return redirect('admin/category');
     }
 
@@ -84,24 +63,21 @@ class CategoryController extends Controller
         $model->category_description = $request->post('category_description');
         $model->category_slug = $request->post('category_slug');
         $model->parent_category_id = $request->post('parent_category_id');
-        // $model->category_image = $request->post('category_image');
         $model->category_order = $request->post('category_order');
         $model->is_home = $request->post('is_home');
+        // $model->status = $request->post('status');
         $model->status = 1;
 
         $model->save();
         $msg = "Category Inserted";
-        $request->session()->flash('message',$msg);
+        session()->flash('message',$msg);
         return redirect('admin/category');
     }
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function delete(Request $request,$id)
     {
         $model = Category::find($id);
         $model->delete();
-        $request->session()->flash('message','Category Deleted');
+        session()->flash('message','Category Deleted');
         return redirect('admin/category');
     }
     public function status(Request $request,$status,$id)
@@ -109,27 +85,7 @@ class CategoryController extends Controller
         $model = Category::find($id);
         $model->status = $status;
         $model->save();
-        $request->session()->flash('message','Status Changed');
+        session()->flash('message','Status Changed');
         return redirect('admin/category');
-    }
-    public function edit(Category $category,$id)
-    {
-        return $id;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Category $category)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Category $category)
-    {
-        //
     }
 }

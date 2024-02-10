@@ -8,7 +8,6 @@
         
         <div>
             <h2 class="content-title card-title">Coupon</h2>
-            <p>Add, edit or delete a coupon</p>
         </div>
         <div>
             <input type="text" placeholder="Search Categories" class="form-control bg-white" />
@@ -48,6 +47,24 @@
                             {{$message}}
                         </div>
                         @enderror
+                        <div class="mb-4">
+                            <label for="type" class="form-label"> Type</label>
+                            <select class="form-select" name="type" id="type">
+                                <option value="Value">Value</option>
+                                <option value="Per">Percentage</option>
+                            </select>
+                       </div>
+                       <div class="mb-4">
+                            <label for="min_order_amt" class="form-label"> Min Order Amt</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="min_order_amt" name="min_order_amt" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="is_one_time" class="form-label"> Is One Time</label>
+                            <select class="form-select" name="is_one_time" id="is_one_time">
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                       </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Create coupon</button>
                         </div>
@@ -68,6 +85,9 @@
                                     <th>Title</th>
                                     <th>Code</th>
                                     <th>Value</th>
+                                    <th>Type</th>
+                                    <th>Minimum Order</th>
+                                    <th>Is One Time</th>
                                     <th class="text-end">Action</th>
                                 </tr>
                             </thead>
@@ -83,6 +103,14 @@
                                     <td><b>{{$show['title']}}</b></td>
                                     <td>{{$show['code']}}</td>
                                     <td>{{$show['value']}}</td>
+                                    <td>{{$show['type']}}</td>
+                                    <td>{{$show['min_order_amt']}}</td>
+                                    @if ($show['is_one_time']==1)
+                                    <td>Yes</td>
+                                    @else
+                                    <td>No</td>
+                                    @endif
+                                    
                                     <td class="text-end">
                                         <div class="dropdown">
                                             <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>

@@ -14,18 +14,31 @@
             <input type="text" placeholder="Search Categories" class="form-control bg-white" />
         </div>
     </div>
-    {{session('message')}}
     <div class="card">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-3">
-                    <form action="{{route('admin.insert')}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{route('admin.insert0')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-4">
                             <label for="category_name" class="form-label">Category Name</label>
                             <input type="text" placeholder="Type here"  class="form-control" id="category_name" name="category_name"/>
                         </div>
                         @error('category_name')
+                        <div class="mb-4 atert alert-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
+                        <div class="mb-4">
+                            <label for="parent_category_id" class="form-label"> Parent Category</label>
+                            <select class="form-select" id="parent_category_id" name="parent_category_id">
+                                <option value="0">Select Parent Categories</option>
+                                    @foreach ($data as $list)
+                                        <option value="{{$list->id}}">{{$list->category_name}}</option>
+                                    @endforeach
+                            </select>
+                        </div>
+                        @error('parent_category_id')
                         <div class="mb-4 atert alert-danger">
                             {{$message}}
                         </div>
@@ -40,21 +53,12 @@
                         </div>
                         @enderror
                         <div class="mb-4">
-                            <label for="parent_category_id" class="form-label"> Parent Category ID</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="parent_category_id" name="parent_category_id" />
-                        </div>
-                        @error('parent_category_id')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
-                        @enderror
-                        <div class="mb-4">
-                            <label for="parent_category_id" class="form-label">Category Images</label>
+                            <label for="image" class="form-label">Category Images</label>
                             <div class="input-upload">
                                 <input class="form-control" type="file" id="image" name="image"/>
                             </div>
                         </div>
-                        @error('parent_category_id')
+                        @error('image')
                         <div class="mb-4 atert alert-danger">
                             {{$message}}
                         </div>
