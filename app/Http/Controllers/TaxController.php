@@ -27,7 +27,7 @@ class TaxController extends Controller
     public function manage_tax_update(Request $request)
     {
         $request->validate([
-            'tax_value'=>'exists:taxes,tax_value'
+            'tax_value'=>'exists:taxes,tax_value|numeric'
         ]);
 
         $model = Tax::find($request->id);
@@ -47,7 +47,7 @@ class TaxController extends Controller
         // dd($request);
         $request->validate([
             'tax_desc'=>'required|unique:taxes,tax_desc',
-            'tax_value'=>'required|unique:taxes,tax_value'
+            'tax_value'=>'required|unique:taxes,tax_value|numeric'
         ],
         [
         'tax_desc.required'=>'The Tax Description field is required.',
@@ -71,7 +71,7 @@ class TaxController extends Controller
         session()->flash('message','Tax Deleted');
         return redirect('admin/tax');
     }
-    public function status(Request $request,$status,$id)
+    public function status_tax(Request $request,$status,$id)
     {
         $model = Tax::find($id);
         $model->status = $status;

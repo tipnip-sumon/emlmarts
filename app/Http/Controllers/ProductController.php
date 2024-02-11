@@ -16,6 +16,7 @@ class ProductController extends Controller
         $result['size'] = DB::table('sizes')->where(['status'=>1])->get();
         $result['color'] = DB::table('colors')->where(['status'=>1])->get();
         $result['brand'] = DB::table('brands')->where(['is_home'=>1])->where(['status'=>1])->get();
+        $result['taxes'] = DB::table('taxes')->where(['status'=>1])->get();
         return view('admin/manage_products',$result);
     }
     public function product_list()
@@ -31,7 +32,9 @@ class ProductController extends Controller
         $result3 = DB::table('sizes')->where(['status'=>1])->get();
         $result4 = DB::table('colors')->where(['status'=>1])->get();
         $result5 = DB::table('product_images')->where(['products_id'=>$id])->get();
-        return view('admin/edit_products',['data'=>$result1['data'],'category'=>$result,'productsAttr'=>$result2,'sizes'=>$result3,'colors'=>$result4,'productImagesArr'=>$result5]);
+        $result6 = DB::table('taxes')->get();
+        $result7 = DB::table('brands')->get();
+        return view('admin/edit_products',['data'=>$result1['data'],'category'=>$result,'productsAttr'=>$result2,'sizes'=>$result3,'colors'=>$result4,'productImagesArr'=>$result5,'taxes'=>$result6,'brands'=>$result7]);
     }
     public function manage_product_update(Request $request)
     {
@@ -55,8 +58,7 @@ class ProductController extends Controller
         $model->uses = $request->uses;
         $model->warranty = $request->warranty;
         $model->lead_time = $request->lead_time;
-        $model->tax = $request->tax;
-        $model->tax_type = $request->tax_type;
+        $model->tax_id = $request->tax_id;
         $model->is_promo = $request->is_promo;
         $model->is_featured = $request->is_featured;
         $model->is_discounted = $request->is_discounted;
@@ -162,8 +164,7 @@ class ProductController extends Controller
         $model->uses = $request->post('uses');
         $model->warranty = $request->post('warranty');
         $model->lead_time = $request->post('lead_time');
-        $model->tax = $request->post('tax');
-        $model->tax_type = $request->post('tax_type');
+        $model->tax_id = $request->post('tax_id');
         $model->is_promo = $request->post('is_promo');
         $model->is_featured = $request->post('is_featured');
         $model->is_discounted = $request->post('is_discounted');

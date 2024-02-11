@@ -271,7 +271,7 @@
                         </div>
                         @enderror
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <div class="mb-4">
                                     <label class="form-label">Lead Time</label>
                                     <div class="row gx-2">
@@ -279,15 +279,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <div class="mb-4">
                                     <label class="form-label">Tax</label>
-                                    <input placeholder="Type here" value="{{old('tax')}}" type="text" class="form-control" id="tax" name="tax"/>
+                                    <select value="{{old('tax_id')}}" class="form-select" id="tax_id" name="tax_id">
+                                        <option value="">Select Tax</option>
+                                        @foreach ($taxes as $list)
+                                        <option  value="{{$list->id}}" {{ (old("tax_id") == $list->id ? "selected":"") }}>{{$list->tax_desc}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <label class="form-label">Tax Type</label>
-                                <input placeholder="Type here" value="{{old('tax_type')}}" type="text" class="form-control" id="tax_type" name="tax_type"/>
                             </div>
                         </div>
                         <div class="row">

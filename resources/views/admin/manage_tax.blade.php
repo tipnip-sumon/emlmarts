@@ -30,7 +30,7 @@
                         @enderror
                         <div class="mb-4">
                             <label for="tax_value" class="form-label">Tax Value</label>
-                            <input type="text" value="{{$tax_value}}" placeholder="Type here"  class="form-control" id="tax_value" name="tax_value"/>
+                            <input type="number" value="{{$tax_value}}" placeholder="Type here"  class="form-control" id="tax_value" name="tax_value"/>
                         </div>
                         @error('tax_value')
                         <div class="mb-4 atert alert-danger">

@@ -63,35 +63,6 @@
                             {{$message}}
                         </div>
                         @enderror
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="mb-4">
-                                    <label class="form-label">Regular price</label>
-                                    <div class="row gx-2">
-                                        <input placeholder="$" type="text" class="form-control" id="reg_price" name="reg_price" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="mb-4">
-                                    <label class="form-label">Promotional price</label>
-                                    <input placeholder="$" type="text" class="form-control" id="pro_price" name="pro_price"/>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <label class="form-label">Currency</label>
-                                <select class="form-select">
-                                    <option>USD</option>
-                                    <option>EUR</option>
-                                    <option>RUBL</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">Tax rate</label>
-                            <input type="text" placeholder="%" class="form-control" id="tax" name="tax" />
-                        </div>
-                    {{-- @endforeach --}}
                 </div>
             </div>
             <div class="card-header">
@@ -352,7 +323,16 @@
                         </div>
                         <div class="mb-4">
                             <label for="brand" class="form-label">Brand</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="brand" name="brand"  value="{{$data->brand}}"/>
+                            brands
+                            <select class="form-select" id="brand" name="brand">
+                                @foreach ($brands as $list)
+                                    @if ($data->brand==$list->id)
+                                        <option selected value="{{$list->id}}">{{$list->brand_name}}</option>
+                                    @elseif ($data->brand!=$list->id)  
+                                        <option value="{{$list->id}}">{{$list->brand_name}}</option>
+                                    @endif
+                                @endforeach
+                            </select>
                         </div>
                         @error('brand')
                         <div class="mb-4 atert alert-danger">
@@ -404,7 +384,7 @@
                             {{$message}}
                         </div>
                         @enderror<div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <div class="mb-4">
                                     <label class="form-label">Lead Time</label>
                                     <div class="row gx-2">
@@ -412,15 +392,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <div class="mb-4">
                                     <label class="form-label">Tax</label>
-                                    <input placeholder="Type here" value="{{$data->tax}}" type="text" class="form-control" id="tax" name="tax"/>
+                                    <select value="{{old('tax_id')}}" class="form-select" id="tax_id" name="tax_id">
+                                        @foreach ($taxes as $list)
+                                        @if ($data->tax_id==$list->id)
+                                        <option selected value="{{$list->id}}">{{$list->tax_desc}}</option>
+                                        @elseif ($data->tax_id!=$list->id)  
+                                        <option value="{{$list->id}}">{{$list->tax_desc}}</option>
+                                        @endif
+                                        @endforeach
+                                    </select>
                                 </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <label class="form-label">Tax Type</label>
-                                <input placeholder="Type here" value="{{$data->tax_type}}" type="text" class="form-control" id="tax_type" name="tax_type"/>
                             </div>
                         </div>
                         <div class="row">

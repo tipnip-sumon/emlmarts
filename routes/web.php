@@ -20,17 +20,13 @@ Route::controller(AdminController::class)->group(function(){
     Route::get('admin','index');
     Route::post('admin/auth','auth')->name('admin.auth');
 });
-Route::controller(AdminController::class)->group(function(){
-    Route::get('admin/dashboard','dashboard');
-    Route::get('admin/passwordupdate','passwordupdate');
-});
 Route::get('frontend/index',[FrontController::class,'index'])->name('frontend.index');
 
 Route::group(['middleware'=>'admin_auth'],function(){
-    // Route::controller(AdminController::class)->group(function(){
-    //     Route::get('admin/dashboard','dashboard');
-    //     Route::get('admin/passwordupdate','passwordupdate');
-    // });
+    Route::controller(AdminController::class)->group(function(){
+        Route::get('admin/dashboard','dashboard');
+        Route::get('admin/passwordupdate','passwordupdate');
+    });
     Route::controller(CategoryController::class)->group(function(){
         Route::get('admin/products-list','product_list');
         Route::get('admin/category','index');
@@ -77,7 +73,7 @@ Route::group(['middleware'=>'admin_auth'],function(){
         Route::post('admin/tax','manage_tax_update');
         Route::post('admin/insert_tax','insert_tax')->name('admin.insert_tax');
         Route::get('admin/tax/delete/{id}','delete');
-        Route::get('admin/tax/status/{status}/{id}','status');
+        Route::get('admin/tax/status/{status}/{id}','status_tax');
         Route::get('admin/tax/status/{status}/{id}','status_list');
     });
     Route::controller(BrandController::class)->group(function(){
