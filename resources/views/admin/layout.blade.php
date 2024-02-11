@@ -86,6 +86,16 @@
                             <a href="{{url('admin/color-list')}}">Color List</a>
                         </div>
                     </li>
+                    <li class="menu-item has-submenu @yield('tax_active')">
+                        <a class="menu-link" href="#">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text">Tax</span>
+                        </a>
+                        <div class="submenu">
+                            <a href="{{url('admin/tax')}}">Tax</a>
+                            <a href="{{url('admin/tax-list')}}">tax List</a>
+                        </div>
+                    </li>
                     <li class="menu-item has-submenu @yield('manage_product_active')">
                         <a class="menu-link" href="#">
                             <i class="icon material-icons md-add_box"></i>

@@ -8,6 +8,7 @@ use App\Http\Controllers\SizeController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\frontend\FrontController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TaxController;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Route;
 
@@ -19,14 +20,17 @@ Route::controller(AdminController::class)->group(function(){
     Route::get('admin','index');
     Route::post('admin/auth','auth')->name('admin.auth');
 });
-
+Route::controller(AdminController::class)->group(function(){
+    Route::get('admin/dashboard','dashboard');
+    Route::get('admin/passwordupdate','passwordupdate');
+});
 Route::get('frontend/index',[FrontController::class,'index'])->name('frontend.index');
 
 Route::group(['middleware'=>'admin_auth'],function(){
-    Route::controller(AdminController::class)->group(function(){
-        Route::get('admin/dashboard','dashboard');
-        Route::get('admin/passwordupdate','passwordupdate');
-    });
+    // Route::controller(AdminController::class)->group(function(){
+    //     Route::get('admin/dashboard','dashboard');
+    //     Route::get('admin/passwordupdate','passwordupdate');
+    // });
     Route::controller(CategoryController::class)->group(function(){
         Route::get('admin/products-list','product_list');
         Route::get('admin/category','index');
@@ -65,6 +69,16 @@ Route::group(['middleware'=>'admin_auth'],function(){
         Route::get('admin/color/delete/{id}','delete');
         Route::get('admin/color/status/{status}/{id}','status');
         Route::get('admin/color/status/{status}/{id}','status_list');
+    });
+    Route::controller(TaxController::class)->group(function(){
+        Route::get('admin/tax-list','tax_list');
+        Route::get('admin/tax','index');
+        Route::get('admin/manage_tax/{id}','manage_tax');
+        Route::post('admin/tax','manage_tax_update');
+        Route::post('admin/insert_tax','insert_tax')->name('admin.insert_tax');
+        Route::get('admin/tax/delete/{id}','delete');
+        Route::get('admin/tax/status/{status}/{id}','status');
+        Route::get('admin/tax/status/{status}/{id}','status_list');
     });
     Route::controller(BrandController::class)->group(function(){
         Route::get('admin/brand-list','brand_list');
