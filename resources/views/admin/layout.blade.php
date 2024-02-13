@@ -102,8 +102,17 @@
                             <span class="text">Product</span>
                         </a>
                         <div class="submenu">
-                            <a href="{{url('admin/manage_products')}}">Add new product</a>
+                            <a href="{{url('admin/manage_products')}}">Add new Product</a>
                             <a href="{{url('admin/product')}}">Product List</a>
+                        </div>
+                    </li>
+                    <li class="menu-item has-submenu @yield('user_active')">
+                        <a class="menu-link" href="#">
+                            <i class="icon material-icons md-add_box"></i>
+                            <span class="text">User</span>
+                        </a>
+                        <div class="submenu">
+                            <a href="{{url('admin/user')}}">User List</a>
                         </div>
                     </li>
                     <li class="menu-item has-submenu">

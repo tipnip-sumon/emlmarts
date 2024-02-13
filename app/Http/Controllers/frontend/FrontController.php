@@ -23,7 +23,13 @@ class FrontController extends Controller
                         ->get();
                 
                 foreach($result['home_categories_products'][$list->id] as $list2){
-                    $result['home_products'][$list2->id]=$list2;
+                    // $result['home_products'][$list2->id]=$list2;
+                    $result['home_product_attr'][$list2->id]=
+                    DB::table('products_attr')
+                    ->leftJoin('sizes','sizes.id','=','products_attr.size_id')
+                    ->leftJoin('colors','colors.id','=','products_attr.color_id')
+                    ->where(['products_attr.products_id'=>[$list2->id]])
+                    ->get();
                 }
             }
             // echo "<pre>";

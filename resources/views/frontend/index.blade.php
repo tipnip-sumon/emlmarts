@@ -44,7 +44,7 @@
         <div class="section-title">
             <div class="title">
                 <h3>Featured Categories</h3>
-                @foreach ($home_categories as $list)
+                @foreach ($home_categories as $list) 
                 <ul class="list-inline nav nav-tabs links">
                     <li class="list-inline-item nav-item"><a class="nav-link" href="shop-grid-right.html">{{ $list->category_name }}</a></li>
                 </ul>
@@ -128,16 +128,16 @@
             @foreach($home_categories as $list)
                 @php
                     $cat_class="";
-                    if($loop_count==$list->id){
+                    if($loop_count==1){
                         $cat_class="active"; 
                         $loop_count++;
                     }
                 @endphp
-                <div class="tab-pane fade show {{$cat_class}}"  aria-labelledby="cat{{$list->id}}">
+                <div class="tab-pane fade show {{$cat_class}}" id="cat{{$list->id}}">
                     <div class="row product-grid-4">
                         @if(isset($home_categories_products[$list->id][0]))
                             @foreach($home_categories_products[$list->id] as $productArr)
-                                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6" id="cat{{$list->id}}">
+                                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
                                     <div class="product-cart-wrap mb-30 wow animate__animated animate__fadeIn" data-wow-delay=".1s" >
                                         <div class="product-img-action-wrap">
                                             <div class="product-img product-img-zoom">

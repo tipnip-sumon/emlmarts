@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rules\Exists;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -40,6 +40,10 @@ class ProductController extends Controller
     {
         $model = Product::find($request->id);
         if($request->hasfile('image')){
+            $proImg = DB::table('products')->where(['id'=>$request->id])->get();
+            if(Storage::exists('/public/media/'.$proImg[0]->image)){
+                Storage::delete('/public/media/'.$proImg[0]->image);
+            };
             $image=$request->file('image');
             $ext = $image->extension();
             $image_name = time().'.'.$ext;
@@ -68,9 +72,7 @@ class ProductController extends Controller
         $model->save();
         $pid = $model->id;
         $paidArr=$request->post('paid');
-        // dd($paidArr);
         $skuArr = $request->sku;
-        // $attr_imageArr = $request->attr_image;
         $mrpArr = $request->mrp;
         $priceArr = $request->price;
         $qtyArr = $request->qty;
@@ -88,11 +90,16 @@ class ProductController extends Controller
             $productAttrArr['updated_at']=now();
 
             if($request->hasFile("attr_image.$key")){
+                $proImg = DB::table('products_attr')->where(['id'=>$paidArr[$key]])->get();
+                if($paidArr[$key]!=''){ 
+                    if(Storage::exists('/public/media/'.$proImg[0]->attr_image)){
+                        Storage::delete('/public/media/'.$proImg[0]->attr_image);
+                    };
+                }
                 $rand = rand('111111111','999999999');
                 $attr_image = $request->file("attr_image.$key");
                 $ext=$attr_image->extension();
                 $image_name = $rand.'.'.$ext;
-                // $image_name = time().'.'.$ext;
                 $attr_image->storeAs('/public/media',$image_name);
                 $productAttrArr['attr_image'] = $image_name;
             }
@@ -105,10 +112,13 @@ class ProductController extends Controller
             
         }
         $piidArr=$request->post('piid');
-        // dd($piidArr);
         foreach($piidArr  as $key => $val){
             $productImageArr['products_id'] = $pid;
             if($request->hasfile("images.$key")){
+                $proImg = DB::table('product_images')->where(['id'=>$piidArr[$key]])->get();
+                if(Storage::exists('/public/media/'.$proImg[0]->images)){
+                    Storage::delete('/public/media/'.$proImg[0]->images);
+                };
                 $rand = rand('111111111','999999999');
                 $attr_image = $request->file("images.$key");
                 $ext=$attr_image->extension();
@@ -132,7 +142,6 @@ class ProductController extends Controller
     public function insert(Request $request)
     
     {
-        // dd($request);
         $request->validate([
             'category_id'=>'required',
             'name'=>'required',
@@ -197,7 +206,6 @@ class ProductController extends Controller
                 $attr_image = $request->file("attr_image.$key");
                 $ext=$attr_image->extension();
                 $image_name = $rand.'.'.$ext;
-                // $image_name = time().'.'.$ext;
                 $attr_image->storeAs('/public/media',$image_name);
                 $productAttrArr['attr_image'] = $image_name;
             }else{
@@ -226,9 +234,6 @@ class ProductController extends Controller
             }
             DB::table('product_images')->insert($productImageArr);
         }
-        
-        
-        
         $msg = "Product Information Inserted";
         session()->flash('message',$msg);
         return redirect('admin/product');
@@ -243,12 +248,21 @@ class ProductController extends Controller
     
     public function attr_delete($id,$pid)
     {
+        $proImg = DB::table('products_attr')->where(['id'=>$pid])->get();
+        if(Storage::exists('/public/media/'.$proImg[0]->attr_image)){
+            Storage::delete('/public/media/'.$proImg[0]->attr_image);
+        };
         DB::table('products_attr')->where(['id'=>$pid])->delete();
         session()->flash('message','Product Attr Deleted');
         return redirect('admin/edit_products/'.$id);
     }
     public function image_delete($id,$pid)
     {
+        $proImg = DB::table('product_images')->where(['id'=>$pid])->get();
+
+        if(Storage::exists('/public/media/'.$proImg[0]->images)){
+            Storage::delete('/public/media/'.$proImg[0]->images);
+        };
         DB::table('product_images')->where(['id'=>$pid])->delete();
         session()->flash('message','Product Image Deleted');
         return redirect('admin/edit_products/'.$id);

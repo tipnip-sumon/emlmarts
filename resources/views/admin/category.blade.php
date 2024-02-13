@@ -134,7 +134,6 @@
                                                 <a class="dropdown-item text-danger" href="{{url('admin/category/delete')}}/{{$show['id']}}">Delete</a>
                                             </div>
                                         </div>
-                                        <!-- dropdown //end -->
                                     </td>
                                 </tr>
                                 @endforeach

@@ -1,16 +1,17 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CouponController;
-use App\Http\Controllers\SizeController;
-use App\Http\Controllers\ColorController;
-use App\Http\Controllers\frontend\FrontController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\TaxController;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TaxController;
+use App\Http\Controllers\SizeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ColorController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\frontend\FrontController;
 
 Route::get('/', function () {
     return view('frontend.index');
@@ -85,6 +86,11 @@ Route::group(['middleware'=>'admin_auth'],function(){
         Route::get('admin/brand/delete/{id}','delete');
         Route::get('admin/brand/status/{status}/{id}','status');
         Route::get('admin/brand/status/{status}/{id}','status_list');
+    });
+    Route::controller(UserController::class)->group(function(){
+        Route::get('admin/user-list','show');
+        Route::get('admin/user','index');
+        Route::get('admin/user/status/{status}/{id}','status');
     });
     Route::controller(ProductController::class)->group(function(){
         Route::get('admin/product','product_list');
