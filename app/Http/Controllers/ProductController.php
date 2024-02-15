@@ -115,10 +115,14 @@ class ProductController extends Controller
         foreach($piidArr  as $key => $val){
             $productImageArr['products_id'] = $pid;
             if($request->hasfile("images.$key")){
+                $res = DB::table('product_images')->where(['id'=>$piidArr[$key]])->exists();
                 $proImg = DB::table('product_images')->where(['id'=>$piidArr[$key]])->get();
-                if(Storage::exists('/public/media/'.$proImg[0]->images)){
-                    Storage::delete('/public/media/'.$proImg[0]->images);
-                };
+                if($res){
+                    if(Storage::exists('/public/media/'.$proImg[0]->images)){
+                        Storage::delete('/public/media/'.$proImg[0]->images);
+                    };
+                }
+                
                 $rand = rand('111111111','999999999');
                 $attr_image = $request->file("images.$key");
                 $ext=$attr_image->extension();

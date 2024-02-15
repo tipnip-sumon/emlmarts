@@ -115,6 +115,15 @@
                             <a href="{{url('admin/user')}}">User List</a>
                         </div>
                     </li>
+                    <li class="menu-item has-submenu @yield('banner_active')">
+                        <a class="menu-link" href="#">
+                            <i class="icon material-icons md-add_box"></i>
+                            <span class="text">Home Banner</span>
+                        </a>
+                        <div class="submenu">
+                            <a href="{{url('admin/homebanner')}}">Home Banner</a>
+                        </div>
+                    </li>
                     <li class="menu-item has-submenu">
                         <a class="menu-link" href="page-orders-1.html">
                             <i class="icon material-icons md-shopping_cart"></i>

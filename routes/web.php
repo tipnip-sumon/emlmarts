@@ -11,6 +11,8 @@ use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SubscribeController;
+use App\Http\Controllers\HomeBannerController;
 use App\Http\Controllers\frontend\FrontController;
 
 Route::get('/', function () {
@@ -21,7 +23,16 @@ Route::controller(AdminController::class)->group(function(){
     Route::get('admin','index');
     Route::post('admin/auth','auth')->name('admin.auth');
 });
-Route::get('frontend/index',[FrontController::class,'index'])->name('frontend.index');
+Route::controller(FrontController::class)->group(function(){
+    Route::get('frontend/index','index')->name('frontend.index');
+    Route::get('frontend/product/{slag}','product');
+});
+
+
+
+Route::controller(SubscribeController::class)->group(function(){
+    Route::post('frontend/subscribe','store')->name('frontend/subscribe');
+});
 
 Route::group(['middleware'=>'admin_auth'],function(){
     Route::controller(AdminController::class)->group(function(){
@@ -103,6 +114,17 @@ Route::group(['middleware'=>'admin_auth'],function(){
         Route::get('admin/edit_products_image/delete/{id}/{pid}','image_delete');
         Route::get('admin/product/status/{status}/{id}','status');
         Route::get('admin/product/status/{status}/{id}','status_list');
+    });
+    Route::controller(HomeBannerController::class)->group(function(){
+        Route::get('admin/homebanner','homebanner_list');
+        Route::get('admin/homebanner','index');
+        Route::get('admin/manage_banner/{id}','manage_banner');
+        Route::post('admin/edit_homebanner','manage_homebanner_update');
+        Route::post('admin/insert_banner','insert_banner')->name('admin.insert_banner');
+        Route::get('admin/homebanner/delete/{id}','delete');
+        Route::get('admin/edit_homebanner/delete/{id}/{pid}','attr_delete');
+        Route::get('admin/edit_homebanner_image/delete/{id}/{pid}','image_delete');
+        Route::get('admin/homebanner/status/{status}/{id}','status');
     });
     Route::get('admin/logout',function(){
         session()->forget('ADMIN_LOGIN');
