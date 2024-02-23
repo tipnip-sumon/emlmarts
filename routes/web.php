@@ -25,6 +25,8 @@ Route::controller(AdminController::class)->group(function(){
 });
 Route::controller(FrontController::class)->group(function(){
     Route::get('frontend/index','index')->name('frontend.index');
+    Route::post('add_to_cart','add_to_cart');
+    Route::get('frontend/cart','cart')->name('frontend.cart');
     Route::get('frontend/product/{slag}','product');
 });
 

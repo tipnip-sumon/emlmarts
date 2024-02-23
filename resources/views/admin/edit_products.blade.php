@@ -90,7 +90,11 @@
                 </div>
             @else
             @foreach ($productImagesArr as $key => $val)
-            <input id="piid" type="hidden" name="piid[]" value="{{$val->id}}">
+            @php 
+            // $loop_image_count=1;
+            $val=(array)$val;
+            @endphp
+            <input id="piid" type="hidden" name="piid[]" value="{{$val['id']}}">
                 <div class="card mb-4" id="product_image_{{$loop_image_count++}}">
                     <div class="card-body">
                         <div class="row">
@@ -98,7 +102,7 @@
                             <div class="col-lg-4">
                                 <div class="mb-4">
                                     <label for="images" class="form-label">Image</label>
-                                    <a href="{{asset('storage/media/'. $val->images)}}" target="_blank" rel="noopener noreferrer"><img src="{{asset('storage/media/'. $val->images)}}" alt="" style="height: 52px;width:52px"/></a>
+                                    <a href="{{asset('storage/media/'. $val['images'])}}" target="_blank" rel="noopener noreferrer"><img src="{{asset('storage/media/'. $val['images'])}}" alt="" style="height: 52px;width:52px"/></a>
                                     
                                     <input type="file" class="form-control" id="images" name="images[]"/>
                                 </div>
@@ -110,7 +114,7 @@
                             </div>
                         @else
                         <div class="col-lg-4">
-                            <a href="{{url('admin/edit_products_image/delete')}}/{{$data->id}}/{{$val->id}}"><button type="button" class="btn btn-danger" onclick=remove_image_more()><i class="text-muted material-icons md-post_add"></i>&nbsp;Remove</button> </a>
+                            <a href="{{url('admin/edit_products_image/delete')}}/{{$data->id}}/{{$val['id']}}"><button type="button" class="btn btn-danger" onclick=remove_image_more()><i class="text-muted material-icons md-post_add"></i>&nbsp;Remove</button> </a>
                         </div>
                         @endif
                     </div>
@@ -514,9 +518,9 @@
     loop_image_count = 1;
     function add_image_more(){
         loop_image_count++;
-        var html = '<input id="piid" type="hidden" name="piid[]" value="'+loop_image_count+'"><div id="product_image_'+loop_image_count+'" class="card mb-4"><div class="card-body"><div class="row">';
+        var html = '<input id="piid" type="hidden" name="piid[]" value=""><div id="product_image_'+loop_image_count+'" class="card mb-4"><div class="card-body"><div class="row">';
         
-        html+='<div class="col-lg-4"><div class="mb-4"><label for="attr_image" class="form-label">Image</label><input type="file" placeholder="images" class="form-control" id="images" name="images[]" /></div></div>';
+        html+='<div class="col-lg-4"><div class="mb-4"><label for="attr_image" class="form-label">Image</label><input  id="images" name="images[]" type="file" placeholder="images" class="form-control"/></div></div>';
         html+='<div class="col-lg-4"><button type="button" class="btn btn-danger" onclick=remove_image_more('+loop_image_count+')><i class="text-muted material-icons"></i>&nbsp;Remove</button></div>';
         html+='</div></div></div>';
         jQuery('#product_image_1').append(html);

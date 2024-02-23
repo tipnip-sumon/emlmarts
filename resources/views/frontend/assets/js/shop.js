@@ -73,7 +73,7 @@
 
             $('.qty-up').on('click', function (event) {
                 event.preventDefault();
-                qtyval = qtyval + 1;   
+                qtyval = qtyval + 1;  
                 $(this).prev().val(qtyval);
             });
 

@@ -19,15 +19,6 @@
 </head>
 
 <body class="single-product">
-    @php
-        $fruits = ['Banana','Orange'];
-    @endphp
-    <script>
-        // var data = @json($fruits);
-        // console.log(data);
-        var data = {{Js::from($fruits)}}
-        console.log(data);
-    </script>
     <!-- Quick view -->
     <div class="modal fade custom-modal" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -811,6 +802,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="container mb-30">
             <div class="row">
                 <div class="col-xl-10 col-lg-12 m-auto">
@@ -828,7 +820,7 @@
                                     <!-- THUMBNAILS -->
                                     <div class="slider-nav-thumbnails">
                                         @foreach ($product_images[$product[0]->id] as $list)
-                                        <div><img src="{{asset('storage/media/'.$list->images)}}" alt="product image" /></div>
+                                        <div><img onclick="change_product('{{asset('storage/media/'.$list->images)}}')" src="{{asset('storage/media/'.$list->images)}}" alt="product image" /></div>
                                         @endforeach
                                     </div>
                                 </div>
@@ -858,24 +850,50 @@
                                     <div class="short-desc mb-30">
                                         <p class="font-lg">{!!$product[0]->short_desc!!}</p>
                                     </div>
-                                    <div class="attr-detail attr-size mb-30">
-                                        <strong class="mr-10">Size / Weight: </strong>
-                                        <ul class="list-filter size-filter font-small">
-                                            @foreach ($product_attr[$product[0]->id] as $list)
-                                            <li><a href="#">{{$list->size}}</a></li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
+                                    @if ($product_attr[$product[0]->id][0]->size_id>0)
+                                        <div class="attr-detail attr-size mb-30">
+                                            <strong class="mr-10">Size / Weight: </strong>
+                                            @php
+                                                $arrSize = [];
+                                                foreach ($product_attr[$product[0]->id] as $attr) {
+                                                    $arrSize[] = $attr->size;
+                                                }
+                                                $arrSize=array_unique($arrSize);
+                                            @endphp
+                                            <ul class="list-filter size-filter font-small">
+                                                @foreach ($arrSize as $list)
+                                                        <li><a class="{{$list}}" onclick="showColor('{{$list}}')" href="#">{{$list}}</a></li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+                                    @if ($product_attr[$product[0]->id][0]->color_id>0)
+                                        <div class="attr-detail attr-size mb-30">
+                                            <strong class="mr-10">Color: </strong>
+                                            <ul class="list-filter size-filter font-small">
+                                                @foreach ($product_attr[$product[0]->id] as $list)
+                                                    @if ($list->color != '')
+                                                        <li><a class="{{$list->color}} product_color {{$list->size}}" onclick="color_name('{{$list->color}}')" href="#">{{$list->color}}</a></li>
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
                                     <div class="detail-extralink mb-50">
                                         <div class="detail-qty border radius">
                                             <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                            <input type="text" name="quantity" class="qty-val" value="1" min="1">
+                                            <input type="text" name="qty" id="qty" class="qty-val" value="1" min="1">
                                             <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                         </div>
                                         <div class="product-extra-link2">
-                                            <button type="submit" class="button button-add-to-cart"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
+                                            <button onclick="add_to_cart('{{$product[0]->id}}','{{$product_attr[$product[0]->id][0]->size_id}}','{{$product_attr[$product[0]->id][0]->color_id}}')" type="submit" class="button button-add-to-cart"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
                                             <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
                                             <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="detail-extralink mb-50">
+                                        <div class="mb-4 alert alert-danger" style="display: none" id="add_to_cart_msg">
+
                                         </div>
                                     </div>
                                     <div class="font-xs">
@@ -890,6 +908,13 @@
                                             <li>Stock:<span class="in-stock text-brand ml-5">{{$product_attr[$product[0]->id][0]->qty}}</span></li>
                                         </ul>
                                     </div>
+                                    <form id="fromAddToCart">
+                                        @csrf
+                                        <input type="hidden" name="size_id" id="size_id">
+                                        <input type="hidden" name="color_id" id="color_id">
+                                        <input type="hidden" name="pqty" id="pqty">
+                                        <input type="hidden" name="product_id" id="product_id">
+                                    </form>
                                 </div>
                                 <!-- Detail Info -->
                             </div>
@@ -1276,4 +1301,140 @@
             </div>
         </div>
     </main>
-    @include('frontend.footer')
+    <footer class="main">
+        <section class="section-padding footer-mid">
+            <div class="container pt-15 pb-20">
+                <div class="row">
+                    <div class="col">
+                        <div class="widget-about font-md mb-md-3 mb-lg-3 mb-xl-0 wow animate__animated animate__fadeInUp" data-wow-delay="0">
+                            <div class="logo mb-30">
+                                <a href="index.html" class="mb-15"><img src="{{asset('frontend/assets/imgs/theme/logo.svg')}}" alt="logo" /></a>
+                                <p class="font-lg text-heading">Awesome grocery store website template</p>
+                            </div>
+                            <ul class="contact-infor">
+                                <li><img src="{{asset('frontend/assets/imgs/theme/icons/icon-location.svg')}}" alt="" /><strong>Address: </strong> <span>5171 W Campbell Ave undefined Kent, Utah 53127 United States</span></li>
+                                <li><img src="{{asset('frontend/assets/imgs/theme/icons/icon-contact.svg')}}" alt="" /><strong>Call Us:</strong><span>(+91) - 540-025-124553</span></li>
+                                <li><img src="{{asset('frontend/assets/imgs/theme/icons/icon-email-2.svg')}}" alt="" /><strong>Email:</strong><span>sale@Nest.com</span></li>
+                                <li><img src="{{asset('frontend/assets/imgs/theme/icons/icon-clock.svg')}}" alt="" /><strong>Hours:</strong><span>10:00 - 18:00, Mon - Sat</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="footer-link-widget col wow animate__animated animate__fadeInUp" data-wow-delay=".1s>
+                        <h4 class=" widget-title">Company</h4>
+                        <ul class="footer-list mb-sm-5 mb-md-0">
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Delivery Information</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms &amp; Conditions</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Support Center</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-link-widget col wow animate__animated animate__fadeInUp" data-wow-delay=".2s">
+                        <h4 class="widget-title">Account</h4>
+                        <ul class="footer-list mb-sm-5 mb-md-0">
+                            <li><a href="#">Sign In</a></li>
+                            <li><a href="#">View Cart</a></li>
+                            <li><a href="#">My Wishlist</a></li>
+                            <li><a href="#">Track My Order</a></li>
+                            <li><a href="#">Help Ticket</a></li>
+                            <li><a href="#">Shipping Details</a></li>
+                            <li><a href="#">Compare products</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-link-widget col wow animate__animated animate__fadeInUp" data-wow-delay=".3s">
+                        <h4 class="widget-title">Corporate</h4>
+                        <ul class="footer-list mb-sm-5 mb-md-0">
+                            <li><a href="#">Become a Vendor</a></li>
+                            <li><a href="#">Affiliate Program</a></li>
+                            <li><a href="#">Farm Business</a></li>
+                            <li><a href="#">Farm Careers</a></li>
+                            <li><a href="#">Our Suppliers</a></li>
+                            <li><a href="#">Accessibility</a></li>
+                            <li><a href="#">Promotions</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-link-widget col wow animate__animated animate__fadeInUp" data-wow-delay=".4s">
+                        <h4 class="widget-title">Popular</h4>
+                        <ul class="footer-list mb-sm-5 mb-md-0">
+                            <li><a href="#">Milk & Flavoured Milk</a></li>
+                            <li><a href="#">Butter and Margarine</a></li>
+                            <li><a href="#">Eggs Substitutes</a></li>
+                            <li><a href="#">Marmalades</a></li>
+                            <li><a href="#">Sour Cream and Dips</a></li>
+                            <li><a href="#">Tea & Kombucha</a></li>
+                            <li><a href="#">Cheese</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-link-widget widget-install-app col wow animate__animated animate__fadeInUp" data-wow-delay=".5s">
+                        <h4 class="widget-title">Install App</h4>
+                        <p class="">From App Store or Google Play</p>
+                        <div class="download-app">
+                            <a href="#" class="hover-up mb-sm-2 mb-lg-0"><img class="active" src="{{asset('frontend/assets/imgs/theme/app-store.jpg')}}" alt="" /></a>
+                            <a href="#" class="hover-up mb-sm-2"><img src="{{asset('frontend/assets/imgs/theme/google-play.jpg')}}" alt="" /></a>
+                        </div>
+                        <p class="mb-20">Secured Payment Gateways</p>
+                        <img class="" src="{{asset('frontend/assets/imgs/theme/payment-method.png')}}" alt="" />
+                    </div>
+                </div>
+        </section>
+        <div class="container pb-30 wow animate__animated animate__fadeInUp" data-wow-delay="0">
+            <div class="row align-items-center">
+                <div class="col-12 mb-30">
+                    <div class="footer-bottom"></div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-md-6">
+                    <p class="font-sm mb-0">&copy; 2022, <strong class="text-brand">Nest</strong> - HTML Ecommerce Template <br />All rights reserved</p>
+                </div>
+                <div class="col-xl-4 col-lg-6 text-center d-none d-xl-block">
+                    <div class="hotline d-lg-inline-flex mr-30">
+                        <img src="{{asset('frontend/assets/imgs/theme/icons/phone-call.svg')}}" alt="hotline" />
+                        <p>1900 - 6666<span>Working 8:00 - 22:00</span></p>
+                    </div>
+                    <div class="hotline d-lg-inline-flex">
+                        <img src="{{asset('frontend/assets/imgs/theme/icons/phone-call.svg')}}" alt="hotline" />
+                        <p>1900 - 8888<span>24/7 Support Center</span></p>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-md-6 text-end d-none d-md-block">
+                    <div class="mobile-social-icon">
+                        <h6>Follow Us</h6>
+                        <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-facebook-white.svg')}}" alt="" /></a>
+                        <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-twitter-white.svg')}}" alt="" /></a>
+                        <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-instagram-white.svg')}}" alt="" /></a>
+                        <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-pinterest-white.svg')}}" alt="" /></a>
+                        <a href="#"><img src="{{asset('frontend/assets/imgs/theme/icons/icon-youtube-white.svg')}}" alt="" /></a>
+                    </div>
+                    <p class="font-sm">Up to 15% discount on your first subscribe</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Vendor JS-->
+    <script src="{{asset('frontend/assets/js/vendor/modernizr-3.6.0.min.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/vendor/jquery-3.6.0.min.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/vendor/jquery-migrate-3.3.0.min.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/vendor/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/slick.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/jquery.syotimer.min.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/waypoints.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/wow.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/perfect-scrollbar.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/magnific-popup.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/select2.min.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/counterup.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/jquery.countdown.min.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/images-loaded.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/isotope.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/scrollup.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/jquery.vticker-min.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/jquery.theia.sticky.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/plugins/jquery.elevatezoom.js')}}"></script>
+    <!-- Template  JS -->
+    <script src="{{asset('frontend/assets/js/main.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/custom.js')}}"></script> 
+    <script src="{{asset('frontend/assets/js/shop.js')}}"></script>
+</body>
+
+</html>

@@ -62,7 +62,7 @@
                                 <button type="submit" class="btn btn-primary w-100">Login</button>
                             </div>
                             @if(!empty(Session::get('errors')))
-                                <div class="mb-4 alert alert-danger">
+                                <div class="mb-4 alert alert-danger" id="remove">
                                     {{Session::get('errors')}}
                                 </div>
                             @endif
@@ -72,6 +72,11 @@
                 </div>
             </section>
         </main>
+        <script>
+            setTimeout(() => {
+                jQuery('#remove').fadeOut();
+            }, 1000);
+        </script>
         <script src="{{asset('assets/js/vendors/jquery-3.6.0.min.js')}}"></script>
         <script src="{{asset('assets/js/vendors/bootstrap.bundle.min.js')}}"></script>
         <script src="{{asset('assets/js/vendors/jquery.fullscreen.min.js')}}"></script>
