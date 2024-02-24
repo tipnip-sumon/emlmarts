@@ -148,7 +148,7 @@
                                 </a>
                                 <a href="{{route('frontend.cart')}}"><span class="lable">Cart</span></a>
                                 {{-- @if ($totalItemCount>0) --}}
-                                <div class="cart-dropdown-wrap cart-dropdown-hm2">
+                                <div class="cart-dropdown-wrap cart-dropdown-hm2" id="cartBox">
                                     <ul>
                                         @foreach ($getAddToCartTotalItem as $cartItem)
                                         @php

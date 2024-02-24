@@ -63,13 +63,24 @@ function add_to_cart(id,size_str_id,color_str_id){
             type:'POST',
             success: function(res){
                 console.log(res);
+                totalPrice=0;
                 if(res.totalItem==0){
                     jQuery('.pro-count').html('0');
-                    jQuery('.cart-dropdown-wrap').hide();
+                    jQuery('#cartBox').remove();
                 }else{
                     jQuery('.pro-count').html(res.totalItem);
+                    var html = '<ul>';
+                    jQuery.each(res.data,function(key,list){
+                        totalPrice = totalPrice+(parseInt(list.qty)*parseInt(list.price));
+                        html+='<li><div class="shopping-cart-img"><a href="shop-product-right.html"><img alt="Nest" src="" /></a></div><div class="shopping-cart-title"><h4><a href="shop-product-right.html">'+list.name+'</a></h4><h4><span>'+list.qty+' × </span>'+list.price+'</h4></div><div class="shopping-cart-delete"><a href="#"><i class="fi-rs-cross-small"></i></a></div></li>';
+                    });
                 }
-                var html = '<div class="cart-dropdown-wrap cart-dropdown-hm2">';
+                
+                    html += '<div class="shopping-cart-footer"><div class="shopping-cart-total"><h4>Total <span>$'+totalPrice+'</span></h4></div><div class="shopping-cart-button"><a href="{{route("frontend.cart")}}" class="outline">View cart</a><a href="shop-checkout.html">Checkout</a></div></div>';
+                    html += '</ul>';
+                    console.log(html);
+                    jQuery('#cartBox').html(html);
+                
             }
         });
     }
