@@ -15,6 +15,9 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{asset('frontend/assets/css/plugins/animate.min.css')}}" />
     <link rel="stylesheet" href="{{asset('frontend/assets/css/main.css')}}" />
+    <script>
+        PRODUCT_IMAGE = '{{asset("storage/media/")}}';
+    </script>
 </head>
 <header class="header-area header-style-1 header-height-2">
     <div class="mobile-promotion">

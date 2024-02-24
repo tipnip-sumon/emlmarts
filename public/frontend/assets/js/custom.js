@@ -72,7 +72,7 @@ function add_to_cart(id,size_str_id,color_str_id){
                     var html = '<ul>';
                     jQuery.each(res.data,function(key,list){
                         totalPrice = totalPrice+(parseInt(list.qty)*parseInt(list.price));
-                        html+='<li><div class="shopping-cart-img"><a href="shop-product-right.html"><img alt="Nest" src="" /></a></div><div class="shopping-cart-title"><h4><a href="shop-product-right.html">'+list.name+'</a></h4><h4><span>'+list.qty+' × </span>'+list.price+'</h4></div><div class="shopping-cart-delete"><a href="#"><i class="fi-rs-cross-small"></i></a></div></li>';
+                        html+='<li><div class="shopping-cart-img"><a href="shop-product-right.html"><img alt="Nest" src="'+PRODUCT_IMAGE+'/'+list.attr_image+'" /></a></div><div class="shopping-cart-title"><h4><a href="shop-product-right.html">'+list.name+'</a></h4><h4><span>'+list.qty+' × </span>'+list.price+'</h4></div><div class="shopping-cart-delete"><a href="#"><i class="fi-rs-cross-small"></i></a></div></li>';
                     });
                 }
                 
