@@ -13,6 +13,7 @@
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('frontend/assets/imgs/theme/favicon.svg')}}" />
     <!-- Template CSS -->
+    <link rel="stylesheet" href="{{asset('frontend/assets/css/plugins/slider-range.css')}}" />
     <link rel="stylesheet" href="{{asset('frontend/assets/css/plugins/animate.min.css')}}" />
     <link rel="stylesheet" href="{{asset('frontend/assets/css/main.css')}}" />
     <script>
@@ -89,7 +90,12 @@
         <div class="container">
             <div class="header-wrap">
                 <div class="logo logo-width-1">
-                    <a href="">
+                    @php
+                    $url = current_url();
+                    $category_list = getTopNavCat();
+                    // prx($category_list['categories']);
+                    @endphp
+                    <a href="{{$url}}">
                         {{Config::get('constants.site_name')}} 
                         {{-- <img src="{{asset('frontend/assets/imgs/theme/logo.svg')}}" alt="logo" /> --}}
                     </a>
@@ -99,6 +105,9 @@
                         <form action="#">
                             <select class="select-active">
                                 <option>All Categories</option>
+                                @foreach ($category_list as $cat_list)
+                                <option>{{$cat_list->category_name}}</option>
+                                @endforeach
                             </select>
                             <input type="text" placeholder="Search for items..." />
                         </form>
@@ -155,6 +164,7 @@
                                     <ul>
                                         @foreach ($getAddToCartTotalItem as $cartItem)
                                         @php
+                                        // prx($cartItem);
                                             $totalAmount=$totalAmount+($cartItem->price)*($cartItem->qty);
                                         @endphp
                                         <li>
@@ -165,9 +175,9 @@
                                                 <h4><a href="shop-product-right.html">{{$cartItem->name}}</a></h4>
                                                 <h4><span>{{$cartItem->qty}} × </span>${{$cartItem->price}}</h4>
                                             </div>
-                                            <div class="shopping-cart-delete">
-                                                <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                            </div>
+                                            {{-- <div class="shopping-cart-delete">
+                                                <a href="#" onclick="deleteAddToCart('{{$cartItem->products_id}}','{{$cartItem->size}}','{{$cartItem->color}}','{{$cartItem->attr_id}}')"><i class="fi-rs-cross-small"></i></a>
+                                            </div> --}}
                                         </li>
                                         @endforeach
                                     </ul>
@@ -231,11 +241,23 @@
                         </a>
                         <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
                             <div class="d-flex categori-dropdown-inner">
-                                {{-- {!! getTopNavCat() !!} --}}
+                                <ul>
+                                    @foreach ($category_list as $item)
+                                    <li>
+                                        <a href="{{url('category/'.$item->category_slug)}}"> <img src="{{asset('storage/media/category/'.$item->category_image)}}" alt="" />{{$item->category_name}}</a>
+                                    </li>
+                                    @endforeach
+                                </ul>
                             </div>
+                            <div class="more_slide_open" style="display: none">
+                                <div class="d-flex categori-dropdown-inner">
+                                    
+                                </div>
+                            </div>
+                            <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show more...</span></div>
                         </div>
                     </div>
-                    <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
+                    {{-- <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
                         <nav>
                             <ul>
                                 <li>
@@ -245,7 +267,7 @@
                                 </li>
                             </ul>
                         </nav>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="hotline d-none d-lg-flex">
                     <img src="{{asset('frontend/assets/imgs/theme/icons/icon-headphone.svg')}}" alt="hotline" />
@@ -438,6 +460,7 @@
 <script src="{{asset('frontend/assets/js/plugins/jquery.syotimer.min.js')}}"></script>
 <script src="{{asset('frontend/assets/js/plugins/waypoints.js')}}"></script>
 <script src="{{asset('frontend/assets/js/plugins/wow.js')}}"></script>
+@stack('slider')
 <script src="{{asset('frontend/assets/js/plugins/perfect-scrollbar.js')}}"></script>
 <script src="{{asset('frontend/assets/js/plugins/magnific-popup.js')}}"></script>
 <script src="{{asset('frontend/assets/js/plugins/select2.min.js')}}"></script>

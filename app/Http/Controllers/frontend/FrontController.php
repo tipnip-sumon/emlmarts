@@ -127,6 +127,10 @@ class FrontController extends Controller
                 ->where(['products_attr.products_id'=>$list1->id])
                 ->get();
         }
+        $result['cat_nav']=DB::table('categories')
+            ->where(['status'=>1])
+            ->where(['is_home'=>1])
+            ->get();
        
         // prx($result);
         return view('frontend.product',$result);
@@ -219,12 +223,51 @@ class FrontController extends Controller
                     ->where(['user_id'=>$uid])
                     ->where(['user_type'=>$user_type])
                     ->get();
-        $result['cart_sub_total'] = DB::table('carts')
-                    ->leftJoin('products_attr','products_attr.id','=','carts.product_attr_id')
-                    ->where(['user_id'=>$uid])
-                    ->where(['user_type'=>$user_type])
-                    ->sum('products_attr.price');
+        // $result['cart_sub_total'] = DB::table('carts')
+        //             ->leftJoin('products_attr','products_attr.id','=','carts.product_attr_id')
+        //             ->where(['user_id'=>$uid])
+        //             ->where(['user_type'=>$user_type])
+        //             ->sum('products_attr.price');
                     // prx($result);
         return view('frontend.cart',$result);
-    }   
+    } 
+    public function category($slug){
+        $result['product']=
+            DB::table('products')
+            ->leftJoin('categories','categories.id','=','products.category_id')
+            ->where(['products.status'=>1])
+            ->where(['categories.category_slug'=>$slug])
+            ->get();
+
+        foreach($result['product'] as $list1){
+            $result['product_attr'][$list1->id]=
+                DB::table('products_attr')
+                ->leftJoin('sizes','sizes.id','=','products_attr.size_id')
+                ->leftJoin('colors','colors.id','=','products_attr.color_id')
+                ->where(['products_attr.products_id'=>$list1->id])
+                ->get();
+        }
+        // prx($result);
+
+        // foreach($result['product'] as $list1){
+        //     $result['product_images'][$list1->id]=
+        //         DB::table('product_images')
+        //         ->where(['product_images.products_id'=>$list1->id])
+        //         ->get();
+        // }
+        // $result['related_product']=
+        //     DB::table('products')
+        //     ->where(['status'=>1])
+        //     ->where('slug','!=',$slug)
+        //     ->where(['category_id'=>$result['product'][0]->category_id])
+        //     ->get();
+        // foreach($result['related_product'] as $list1){
+        //     $result['related_product_attr'][$list1->id]=
+        //         DB::table('products_attr')
+        //         ->leftJoin('sizes','sizes.id','=','products_attr.size_id')
+        //         ->leftJoin('colors','colors.id','=','products_attr.color_id')
+        //         ->where(['products_attr.products_id'=>$list1->id])
+        //         ->get();
+        return view('frontend.category',$result);
+    } 
 }

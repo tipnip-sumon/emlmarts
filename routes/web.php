@@ -24,10 +24,11 @@ Route::controller(AdminController::class)->group(function(){
     Route::post('admin/auth','auth')->name('admin.auth');
 });
 Route::controller(FrontController::class)->group(function(){
-    Route::get('frontend/index','index')->name('frontend.index');
+    Route::get('/','index')->name('frontend.index');
     Route::post('add_to_cart','add_to_cart');
-    Route::get('frontend/cart','cart')->name('frontend.cart');
-    Route::get('frontend/product/{slag}','product');
+    Route::get('cart','cart')->name('frontend.cart');
+    Route::get('product/{slag}','product');
+    Route::get('category/{id}','category');
 });
 
 

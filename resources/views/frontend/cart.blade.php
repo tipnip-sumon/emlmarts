@@ -40,7 +40,13 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $totalAmount=0;
+                            @endphp
                             @foreach ($cart as $show)
+                            @php
+                                $totalAmount=$totalAmount+($show->price)*($show->qty);
+                            @endphp
                             <tr class="pt-30" id="AdToCartBox{{$show->attr_id}}">
                                 <td class="custome-checkbox pl-30">
                                     <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox1" value="">
@@ -384,8 +390,8 @@
                                     <td class="cart_total_label">
                                         <h6 class="text-muted">Subtotal</h6>
                                     </td>
-                                    <td class="cart_total_amount">
-                                        <h4 class="text-brand text-end">${{$cart_sub_total}}</h4>
+                                    <td class="cart_total_amount cart_sub_ttl">
+                                        <h4 class="text-brand text-end">${{$totalAmount}}</h4>
                                     </td>
                                 </tr>
                                 <tr>
