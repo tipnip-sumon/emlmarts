@@ -75,7 +75,6 @@ function add_to_cart(id,size_str_id,color_str_id){
                         html+='<li><div class="shopping-cart-img"><a href="shop-product-right.html"><img alt="Nest" src="'+PRODUCT_IMAGE+'/'+list.attr_image+'" /></a></div><div class="shopping-cart-title"><h4><a href="shop-product-right.html">'+list.name+'</a></h4><h4><span>'+list.qty+' × </span>'+list.price+'</h4></div><div class="shopping-cart-delete"><a href="#"><i class="fi-rs-cross-small"></i></a></div></li>';
                     });
                 }
-                
                     html += '<div class="shopping-cart-footer"><div class="shopping-cart-total"><h4>Total <span>$'+totalPrice+'</span></h4></div><div class="shopping-cart-button"><a href="{{route("frontend.cart")}}" class="outline">View cart</a><a href="shop-checkout.html">Checkout</a></div></div>';
                     html += '</ul>';
                     console.log(html);
