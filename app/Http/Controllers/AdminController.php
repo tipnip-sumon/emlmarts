@@ -39,16 +39,16 @@ class AdminController extends Controller
 
         if($result){
             if(Hash::check($request->post('password'),$result->password)){
-                $request->session()->put('ADMIN_LOGIN',true);
-                $request->session()->put('ADMIN_ID',$result->id);
+                session()->put('ADMIN_LOGIN',true);
+                session()->put('ADMIN_ID',$result->id);
                 return redirect('admin/dashboard');
             }else{
-                $request->session()->flash('errors','Please Correct Password');
+                session()->flash('errors','Please Correct Password');
                 return redirect('admin');
             }
            
         }else{
-            $request->session()->flash('errors','Please Correct Login Details');
+            session()->flash('errors','Please Correct Login Details');
             return redirect('admin');
         }
 

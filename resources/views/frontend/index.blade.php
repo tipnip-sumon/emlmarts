@@ -151,14 +151,14 @@
                                     <p class="mb-65">Sign up for the daily newsletter</p>
                                     <form class="form-subcriber d-flex" action="{{route('frontend/subscribe')}}" method="POST">
                                         @csrf  
-                                        <input type="email" id="email" name="email" placeholder="Your emaill address" />
+                                        <input type="email" id="email" name="email" placeholder="Your email address" />
                                         <button class="btn" type="submit">@if(session('message'))Subscribed @else Subscribe @endif</button>
                                     </form>
-                                    @error('email')
+                                    {{-- @error('email')
                                         <div class="mb-4">
                                             {{$message}}
                                         </div>
-                                    @enderror
+                                    @enderror --}}
                                 </div>
                             </div>
                             @endforeach
@@ -252,21 +252,22 @@
                     <!--End nav-tabs-->
                     <div class="tab-content" >
                         @php
-                        $loop_count=1;
+                            // $loop_count=1;
                         @endphp
                         @foreach($home_categories as $list)
                             @php
                                 $cat_class="";
+                                $loop_count=1;
                                 if($loop_count==1){
                                     $cat_class="active"; 
                                     $loop_count++;
                                 }
+                                // prx($loop_count);
                             @endphp
                             <div class="tab-pane fade show {{$cat_class}}" id="cat{{$list->id}}">
                                 <div class="row product-grid-4">
                                     @if(isset($home_categories_products[$list->id][0]))
                                         @foreach($home_categories_products[$list->id] as $productArr)
-                                        {{-- @dd($productArr) --}}
                                             <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
                                                 <div class="product-cart-wrap mb-30 wow animate__animated animate__fadeIn" data-wow-delay=".1s" >
                                                     <div class="product-img-action-wrap">

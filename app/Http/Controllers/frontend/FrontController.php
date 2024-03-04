@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers\frontend;
 
+use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Validated;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Validation\Rules\Exists;
+use Illuminate\Support\Facades\Validator;
 
 class FrontController extends Controller
 {
@@ -88,6 +95,7 @@ class FrontController extends Controller
                         ->where(['status'=>1])
                         ->where(['is_home'=>1])
                         ->get();
+                        // prx($result);
                         
         return view('frontend.index',$result);
     }
@@ -231,43 +239,146 @@ class FrontController extends Controller
                     // prx($result);
         return view('frontend.cart',$result);
     } 
-    public function category($slug){
-        $result['product']=
-            DB::table('products')
-            ->leftJoin('categories','categories.id','=','products.category_id')
-            ->where(['products.status'=>1])
-            ->where(['categories.category_slug'=>$slug])
-            ->get();
+    public function category(Request $request, $slug){
+        $filter_price_start="";
+        $filter_price_end="";
+        $sort="";
+        if($request->get('sort')!==null){
+            $sort = $request->get('sort');
+        }
+        $query=DB::table('products');
+        $query=$query->leftJoin('categories','categories.id','=','products.category_id');
+        $query=$query->leftJoin('products_attr','products_attr.id','=','products.id');
+        $query=$query->where(['products.status'=>1]);
+        $query=$query->where(['categories.category_slug'=>$slug]);
+        if($request->get('filter_price_start')!==null && $request->get('filter_price_end')!==null){
+            $filter_price_start=$request->get('filter_price_start');
+            $filter_price_end=$request->get('filter_price_end');
+            $query=$query->whereBetween('products_attr.price',[$filter_price_start,$filter_price_end]);
+        }
+        $query=$query->distinct()->select('products.*');
+        if(isset($sort)){
+            if($sort=='name'){
+                $query=$query->orderBy('products.name','asc');
+            } 
+        }
+        if(isset($sort)){
+            if($sort=='date'){
+                $query=$query->orderBy('products.id','asc');
+            }
+        }
+         if(isset($sort)){
+            if($sort=='price_asc'){
+                $query1=$query->orderBy('products_attr.price','asc');
+            } 
+        }
+        if(isset($sort)){
+            if($sort=='price_desc'){
+                $query=$query->orderBy('products_attr.price','desc');
+            } 
+        }
+        $query=$query->get();
+        $result['filter_price_start']=$filter_price_start;
+        $result['filter_price_end']=$filter_price_end;
+        $result['product']=$query;
+        $result['count']=count($query);
 
         foreach($result['product'] as $list1){
-            $result['product_attr'][$list1->id]=
-                DB::table('products_attr')
-                ->leftJoin('sizes','sizes.id','=','products_attr.size_id')
-                ->leftJoin('colors','colors.id','=','products_attr.color_id')
-                ->where(['products_attr.products_id'=>$list1->id])
-                ->get();
+            $query1=DB::table('products_attr');
+                $query1=$query1->leftJoin('sizes','sizes.id','=','products_attr.size_id');
+                $query1=$query1->leftJoin('colors','colors.id','=','products_attr.color_id');
+                $query1=$query1->where(['products_attr.products_id'=>$list1->id]);
+                $query1=$query1->distinct()->select('products_attr.*','sizes.*','colors.*');
+                $query1=$query1->get();
+                $result['product_attr'][$list1->id]=$query1;
         }
+        $result['left_categories_slug'] = 
+                DB::table('categories')
+                ->where(['status'=>1])
+                ->get();
         // prx($result);
-
-        // foreach($result['product'] as $list1){
-        //     $result['product_images'][$list1->id]=
-        //         DB::table('product_images')
-        //         ->where(['product_images.products_id'=>$list1->id])
-        //         ->get();
-        // }
-        // $result['related_product']=
-        //     DB::table('products')
-        //     ->where(['status'=>1])
-        //     ->where('slug','!=',$slug)
-        //     ->where(['category_id'=>$result['product'][0]->category_id])
-        //     ->get();
-        // foreach($result['related_product'] as $list1){
-        //     $result['related_product_attr'][$list1->id]=
-        //         DB::table('products_attr')
-        //         ->leftJoin('sizes','sizes.id','=','products_attr.size_id')
-        //         ->leftJoin('colors','colors.id','=','products_attr.color_id')
-        //         ->where(['products_attr.products_id'=>$list1->id])
-        //         ->get();
         return view('frontend.category',$result);
     } 
+    public function search(Request $request,$str)
+    {
+        $query=DB::table('products');
+        $query=$query->leftJoin('categories','categories.id','=','products.category_id');
+        $query=$query->leftJoin('products_attr','products_attr.id','=','products.id');
+        $query=$query->where('products.name','like',"%$str%");
+        $query=$query->orWhere('products.brand','like',"%$str%");
+        $query=$query->orWhere('products.model','like',"%$str%");
+        $query=$query->orWhere('products.short_desc','like',"%$str%");
+        $query=$query->orWhere('products.desc','like',"%$str%");
+        $query=$query->orWhere('products.technical_spceification','like',"%$str%");
+        $query=$query->orWhere('products.warranty','like',"%$str%");
+        // $query=$query->distinct()->select('products.*');
+        $query=$query->get();
+        $result['product']=$query;
+        $result['count']=count($query);
+
+        foreach($result['product'] as $list1){
+            $query1=DB::table('products_attr');
+                $query1=$query1->leftJoin('sizes','sizes.id','=','products_attr.size_id');
+                $query1=$query1->leftJoin('colors','colors.id','=','products_attr.color_id');
+                $query1=$query1->where(['products_attr.products_id'=>$list1->id]);
+                $query1=$query1->distinct()->select('products_attr.*','sizes.*','colors.*');
+                $query1=$query1->get();
+                $result['product_attr'][$list1->id]=$query1;
+        }
+        // prx($result);
+        return view('frontend.search',$result);
+    }
+    public function register(){
+        return view('frontend.register');
+    }
+    public function register_process(Request $request){
+        $valid = Validator::make($request->all(),[
+            "username"=>'required|min:5',
+            "email"=>'required|email|unique:users,email',
+            "mobile"=>'required|unique:users,mobile',
+            'password' => 'min:6',
+            'password_confirmation' => 'required_with:password|same:password|min:6'
+        ]);
+        if(!$valid->passes()){
+            return response()->json(['status'=>'error','error'=>$valid->errors()->toArray()]);
+        }else{
+            $model = new User();
+            $model->name = $request->username;
+            $model->email = $request->email;
+            $model->mobile = $request->mobile;
+            $model->password = Hash::make($request->password);
+            // $model->password = Crypt::encrypt($request->password);
+            $model->status = 1;
+            $res = $model->save();
+            if($res){
+                return response()->json([
+                    'status'=>'success','msg'=>'Registration Successfully.'
+                ]);
+            }
+        }
+        
+    }
+    public function login(){
+        return view('frontend.login');
+    }
+    public function login_process(Request $request){
+        $result = User::where(['email'=>$request->login_email])->first();
+        if($result){
+            if(Hash::check($request->password, $result->password)){
+                session()->put('FRONT_USER_LOGIN',true);
+                session()->put('FRONT_USER_ID',$result->id);
+                session()->put('FRONT_USER_NAME',$result->name);
+                $status='success';
+                $msg="Login Successfully";
+            }else{
+                $status='error';
+                $msg="Incorrect Password";
+            }
+        }else{
+            $status='error';
+            $msg='Please enter your valid email';
+        }
+        return response()->json(['status'=>$status,'msg'=>$msg]);
+            
+    }
 }

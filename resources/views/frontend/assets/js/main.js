@@ -46,13 +46,19 @@
             $(this).width(50);
         });
         var rangeSlider = document.getElementById("slider-range");
+        var filter_price_start = document.getElementById("filter_price_start");
+        var filter_price_end = document.getElementById("filter_price_end");
+        if(filter_price_start == '' || filter_price_end == ''){
+            filter_price_start=10;
+            filter_price_end=1000;
+        }
         var moneyFormat = wNumb({
             decimals: 0,
             thousand: ",",
             prefix: "$"
         });
         noUiSlider.create(rangeSlider, {
-            start: [500, 1000],
+            start: [filter_price_start, filter_price_end],
             step: 1,
             range: {
                 min: [0],
@@ -64,8 +70,8 @@
 
         // Set visual min and max values and also update value hidden form inputs
         rangeSlider.noUiSlider.on("update", function (values, handle) {
-            document.getElementById("slider-range-value1").innerHTML = values[0];
-            document.getElementById("slider-range-value2").innerHTML = values[1];
+            document.getElementById("slider-range-value1").innerHTML = values[filter_price_start];
+            document.getElementById("slider-range-value2").innerHTML = values[filter_price_end];
             document.getElementsByName("min-value").value = moneyFormat.from(values[0]);
             document.getElementsByName("max-value").value = moneyFormat.from(values[1]);
         });

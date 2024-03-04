@@ -92,6 +92,7 @@
                 <div class="logo logo-width-1">
                     @php
                     $url = current_url();
+                   
                     $category_list = getTopNavCat();
                     // prx($category_list['categories']);
                     @endphp
@@ -109,7 +110,8 @@
                                 <option>{{$cat_list->category_name}}</option>
                                 @endforeach
                             </select>
-                            <input type="text" placeholder="Search for items..." />
+                            <input type="text" name="search_str" placeholder="Search for items..." id="search_str"/>
+                            <button type="button" onclick="fun_search()"></button>
                         </form>
                     </div>
                     <div class="header-action-right">
@@ -212,12 +214,14 @@
                                         <li>
                                             <a href="shop-wishlist.html"><i class="fi fi-rs-heart mr-10"></i>My Wishlist</a>
                                         </li>
-                                        <li>
-                                            <a href="page-account.html"><i class="fi fi-rs-settings-sliders mr-10"></i>Setting</a>
-                                        </li>
-                                        <li>
-                                            <a href="page-login.html"><i class="fi fi-rs-sign-out mr-10"></i>Sign out</a>
-                                        </li>
+                                        <li><a href="page-account.html"><i class="fi fi-rs-settings-sliders mr-10"></i>Setting</a></li>
+                                        @if (session()->has('FRONT_USER_LOGIN')!=null)
+                                        <li><a href="{{url('/logout')}}"><i class="fi fi-rs-sign-out mr-10"></i>Sign out</a></li>
+                                        @else
+                                        <li><a href="{{url('register')}}"><i class="fi fi-rs-sign-in mr-10"></i>Registration</a></li>
+                                        <li><a href="{{url('login')}}"><i class="fi fi-rs-sign-in mr-10"></i>Login</a></li>
+                                        @endif
+                                        
                                     </ul>
                                 </div>
                             </div>

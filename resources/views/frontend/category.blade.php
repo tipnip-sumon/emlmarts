@@ -7,7 +7,7 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <a href="/" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
                     <span></span> Shop <span></span> Fillter
                 </div>
             </div>
@@ -31,18 +31,11 @@
                                     @endphp
                                     <div class="categories-dropdown-wrap font-heading">
                                         <ul>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{{asset('frontend/assets/imgs/theme/icons/category-1.svg')}}" alt="" />Milks and Dairies</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{{asset('frontend/assets/imgs/theme/icons/category-2.svg')}}" alt="" />Clothing &amp; beauty</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{{asset('frontend/assets/imgs/theme/icons/category-3.svg')}}" alt="" />Pet Foods &amp; Toy</a>
-                                            </li>
-                                            <li class="mb-0">
-                                                <a href="shop-grid-right.html"> <img src="{{asset('frontend/assets/imgs/theme/icons/category-4.svg')}}" alt="" />Baking material</a>
-                                            </li>
+                                            @foreach ($left_categories_slug as $cat_slug)
+                                                <li>
+                                                    <a href="{{url('category/'.$cat_slug->category_slug)}}"> <img src="{{asset('storage/media/category/'.$cat_slug->category_image)}}" alt="" />{{$cat_slug->category_name}}</a>
+                                                </li>
+                                            @endforeach
                                         </ul>
                                     </div>
                                 </div>
@@ -134,11 +127,14 @@
                                     <div class="sidebar-widget price_range range">
                                         <div class="price-filter mb-20">
                                             <div class="price-filter-inner">
-                                                <div id="slider-range" class="mb-20"></div>
-                                                <div class="d-flex justify-content-between">
-                                                    <div class="caption">From: <strong id="slider-range-value1" class="text-brand"></strong></div>
-                                                    <div class="caption">To: <strong id="slider-range-value2" class="text-brand"></strong></div>
-                                                </div>
+                                                <form action="">
+                                                    <div id="slider-range" class="mb-20"></div>
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="caption">From: <strong id="slider-range-value1" class="text-brand"></strong></div>
+                                                        <div class="caption">To: <strong id="slider-range-value2" class="text-brand"></strong></div>
+                                                    </div>
+                                                    <a type="button" class="btn btn-info mt-10" onclick="sort_price_filter()">Filter</a>
+                                                </form>
                                             </div>
                                         </div>
                                         <div class="custome-checkbox">
@@ -166,7 +162,7 @@
                 <div class="col-12">
                     <div class="shop-product-fillter">
                         <div class="totall-product">
-                            <p>We found <strong class="text-brand">29</strong> items for you!</p>
+                            <p>We found <strong class="text-brand">{{$count}}</strong> items for you!</p>
                         </div>
                         <div class="sort-by-product-area">
                             <div class="sort-by-cover mr-10">
@@ -194,30 +190,29 @@
                                         <span><i class="fi-rs-apps-sort"></i>Sort by:</span>
                                     </div>
                                     <div class="sort-by-dropdown-wrap">
-                                        <span> Featured <i class="fi-rs-angle-small-down"></i></span>
+                                        <select onchange="sort_by()" id="sort_by_value">
+                                            <option value="">Featured</option>
+                                            <option value="price_asc">Price: Low to High</option>
+                                            <option value="price_desc">Price: High to Low</option>
+                                            <option value="name">Name</option>
+                                            <option value="date">Release Date</option>
+                                            {{-- <li value="price_asc"><a href="#">Avg. Rating</a></li> --}}
+                                        </select>
                                     </div>
-                                </div>
-                                <div class="sort-by-dropdown">
-                                    <ul>
-                                        <li><a class="active" href="#">Featured</a></li>
-                                        <li><a href="#">Price: Low to High</a></li>
-                                        <li><a href="#">Price: High to Low</a></li>
-                                        <li><a href="#">Release Date</a></li>
-                                        <li><a href="#">Avg. Rating</a></li>
-                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row product-grid">
-                        @foreach($product as $cat_product)
+                        @if(isset($product[0]))
+                        @foreach($product as $productArr)
                         <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
                             <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
                                         <a href="shop-product-right.html">
-                                            <img class="default-img" src="{{asset('storage/media/'.$cat_product->image)}}" alt="" />
-                                            <img class="hover-img" src="{{asset('storage/media/'.$cat_product->image)}}" alt="" />
+                                            <img class="default-img" src="{{asset('storage/media/'.$productArr->image)}}" alt="" />
+                                            <img class="hover-img" src="{{asset('storage/media/'.$productArr->image)}}" alt="" />
                                         </a>
                                     </div>
                                     <div class="product-action-1">
@@ -233,7 +228,7 @@
                                     <div class="product-category">
                                         <a href="shop-grid-right.html">Snack</a>
                                     </div>
-                                    <h2><a href="shop-product-right.html">{{$cat_product->name}}</a></h2>
+                                    <h2><a href="shop-product-right.html">{{$productArr->name}}</a></h2>
                                     <div class="product-rate-cover">
                                         <div class="product-rate d-inline-block">
                                             <div class="product-rating" style="width: 90%"></div>
@@ -245,17 +240,18 @@
                                     </div>
                                     <div class="product-card-bottom">
                                         <div class="product-price">
-                                            <span>${{$product_attr[$cat_product->id][0]->mrp}}</span>
-                                            <span class="old-price">${{$product_attr[$cat_product->id][0]->price}}</span>
+                                            <span>${{$product_attr[$productArr->id][0]->mrp}}</span>
+                                            <span class="old-price">${{$product_attr[$productArr->id][0]->price}}</span>
                                         </div>
                                         <div class="add-cart">
-                                            <a class="add" href="javascript:void(0)" onclick="home_add_to_cart('{{$cat_product->id}}','{{$product_attr[$cat_product->id][0]->size}}','{{$product_attr[$cat_product->id][0]->color}}')"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                            <a class="add" href="javascript:void(0)" onclick="home_add_to_cart('{{$productArr->id}}','{{$product_attr[$productArr->id][0]->size}}','{{$product_attr[$productArr->id][0]->color}}')"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         @endforeach
+                        @endif
                     </div>
                     <input type="hidden" id="qty" value="1"/>
                     <form id="fromAddToCart">
@@ -447,6 +443,11 @@
             </div>
         </div>
     </main>
+    <form id="categoryFilter">
+        <input type="hidden" name="sort" id="sort">
+        <input type="hidden" name="filter_price_start" id="filter_price_start" value="{{$filter_price_start}}">
+        <input type="hidden" name="filter_price_end" id="filter_price_end" value="{{$filter_price_end}}">
+    </form>
 @endsection
 @push('slider')
 <script src="{{asset('frontend/assets/js/plugins/slider-range.js')}}"></script>

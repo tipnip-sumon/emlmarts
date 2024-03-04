@@ -29,8 +29,19 @@ Route::controller(FrontController::class)->group(function(){
     Route::get('cart','cart')->name('frontend.cart');
     Route::get('product/{slag}','product');
     Route::get('category/{id}','category');
+    Route::get('search/{str}','search');
+    Route::get('register','register');
+    Route::get('login','login');
+    Route::post('register_process','register_process')->name('register.register_process');
+    Route::post('login_process','login_process')->name('login.login_process');
 });
-
+Route::get('logout',function(){
+    session()->forget('FRONT_USER_LOGIN');
+    session()->forget('FRONT_USER_ID');
+    session()->forget('FRONT_USER_NAME');
+    session()->flash('errors','Successfully sdfdsf Logout');
+    return redirect('/');
+});
 
 
 Route::controller(SubscribeController::class)->group(function(){
@@ -135,4 +146,5 @@ Route::group(['middleware'=>'admin_auth'],function(){
         session()->flash('errors','Successfully Logout');
         return redirect('admin');
     });
+    
 });
