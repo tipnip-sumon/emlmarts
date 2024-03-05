@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminAuth
+class UserLoginAuth
 {
     /**
      * Handle an incoming request.
@@ -15,12 +15,12 @@ class AdminAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->session()->has('ADMIN_LOGIN')){
+        prx($request->session()->all());
+        // if($request->session()->has('FRONT_USER_LOGIN')){
 
-        }else{
-            session()->flash('errors','Access Denied');
-            return redirect('admin');
-        } 
-        return $next($request); 
+        // }else{
+        //     return redirect("/");
+        // }
+        // return $next($request);
     }
 }

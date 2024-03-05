@@ -365,9 +365,9 @@ class FrontController extends Controller
         $result = User::where(['email'=>$request->login_email])->first();
         if($result){
             if(Hash::check($request->password, $result->password)){
-                session()->put('FRONT_USER_LOGIN',true);
-                session()->put('FRONT_USER_ID',$result->id);
-                session()->put('FRONT_USER_NAME',$result->name);
+                $request->session()->put('FRONT_USER_LOGIN',true);
+                $request->session()->put('FRONT_USER_ID',$result->id);
+                $request->session()->put('FRONT_USER_NAME',$result->name);
                 $status='success';
                 $msg="Login Successfully";
             }else{
