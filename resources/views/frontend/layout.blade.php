@@ -432,7 +432,7 @@
             </div>
             <div class="col-xl-4 col-lg-6 text-center d-none d-xl-block">
                 <div class="hotline d-lg-inline-flex mr-30">
-                                        <img src="{{asset('frontend/assets/imgs/theme/icons/phone-call.svg')}}" alt="hotline" />
+                    <img src="{{asset('frontend/assets/imgs/theme/icons/phone-call.svg')}}" alt="hotline" />
                     <p>1900 - 6666<span>Working 8:00 - 22:00</span></p>
                 </div>
                 <div class="hotline d-lg-inline-flex">

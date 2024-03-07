@@ -22,6 +22,18 @@
                             <div class="col-lg-6 pr-30 d-none d-lg-block">
                                 <img class="border-radius-15" src="assets/imgs/page/login-1.png" alt="" />
                             </div>
+                            {{-- @dd($_COOKIE['login_email']) --}}
+                            @php
+                                if(isset($_COOKIE['login_email']) && isset($_COOKIE['login_pwd'])){
+                                    $login_email = $_COOKIE['login_email'];
+                                    $login_pwd = $_COOKIE['login_pwd'];
+                                    $is_remember = "checked='checked'"; 
+                                }else {
+                                    $login_email = "";
+                                    $login_pwd = "";
+                                    $is_remember = "";
+                                }
+                            @endphp
                             <div class="col-lg-6 col-md-8">
                                 <div class="login_wrap widget-taber-content background-white">
                                     <div class="padding_eight_all bg-white">
@@ -32,14 +44,14 @@
                                         <form id="frmLogin">
                                             @csrf
                                             <div class="form-group">
-                                                <input type="text" required="" name="login_email" placeholder="Username or Email *" />
+                                                <input type="text" required="" value="{{$login_email}}" name="login_email" placeholder="Username or Email *" />
                                             </div>
                                             <div class="form-group">
-                                                <input required="" type="password" name="password" placeholder="Your password *" />
+                                                <input required="" type="password" value="{{$login_pwd}}" name="password" placeholder="Your password *" />
                                             </div>
                                             <div class="login_footer form-group">
                                                 <div class="chek-form">
-                                                    <input type="text" required="" name="code" placeholder="Security code *" />
+                                                    <input type="text" name="code" placeholder="Security code *" />
                                                 </div>
                                                 <span class="security-code">
                                                     <b class="text-new">8</b>
@@ -51,7 +63,7 @@
                                             <div class="login_footer form-group mb-50">
                                                 <div class="chek-form">
                                                     <div class="custome-checkbox">
-                                                        <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox1" value="" />
+                                                        <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox1" {{$is_remember}}/>
                                                         <label class="form-check-label" for="exampleCheckbox1"><span>Remember me</span></label>
                                                     </div>
                                                 </div>

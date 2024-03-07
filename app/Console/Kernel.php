@@ -13,11 +13,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        // $schedule->command('get_db_name')->everyMinute();
         // $schedule->command('inspire')->everyMinute();
         // $schedule->call(function () {
-        //     User::whereNull("address")->delete();
+        //     User::where(["is_verify"=> false])->delete();
         // })->everyMinute();
-        $schedule->command("EmailSand")->everyMinute();
+        // $schedule->command("EmailSand")->everyMinute();
+        $schedule->call(function () {
+            $url = current_url();
+            echo"". $url ."";
+        })->everyMinute();
     }
 
     /**

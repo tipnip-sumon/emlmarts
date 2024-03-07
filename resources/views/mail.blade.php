@@ -7,6 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <p>Hello from mail</p>
+    <a href="{{url('/email_verification')}}/{{$data}}">Click Verification</a>
+    <p>{{$url}}</p>
 </body>
 </html>

@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Nette\Schema\Helpers;
+use Symfony\Component\Console\Helper\Helper;
 
 class GetDBName extends Command
 {
@@ -26,8 +28,9 @@ class GetDBName extends Command
      */
     public function handle()
     {
-        $dbName = DB::connection()->getDatabaseName();
-        $this->info('Current database name is '.$dbName);
+        $name = current_url();
+        // $dbName = DB::connection()->getDatabaseName();
+        $this->info('Current database name is '.$name);
         // $name = DB::table('users')->get();
         // $this->info($name);
     }

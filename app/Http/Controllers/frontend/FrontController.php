@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\frontend;
 
+use Illuminate\Http\Response;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\Rules\Exists;
 use Illuminate\Support\Facades\Validator;
 
@@ -332,6 +335,7 @@ class FrontController extends Controller
         return view('frontend.register');
     }
     public function register_process(Request $request){
+        $rand = rand(111111111,999999999);
         $valid = Validator::make($request->all(),[
             "username"=>'required|min:5',
             "email"=>'required|email|unique:users,email',
@@ -349,12 +353,21 @@ class FrontController extends Controller
             $model->password = Hash::make($request->password);
             // $model->password = Crypt::encrypt($request->password);
             $model->status = 1;
+            $model->is_verify = 0;
+            $model->rand_id = $rand;
             $res = $model->save();
+            
             if($res){
-                return response()->json([
-                    'status'=>'success','msg'=>'Registration Successfully.'
-                ]);
+                $url = url('/mail');
+                $data = ['name'=>$request->username,'data'=>$rand,'url'=>$url];
+                $user['to'] = $request->email;
+                Mail::send('mail', $data, function($message) use ($user) {
+                    $message->to($user['to']);
+                    $message->subject('Email ID verification');
+                });
+                
             }
+            return response()->json(['status'=>'success','msg'=>'Registration Successfully.Please check your mail & verification.']);
         }
         
     }
@@ -365,6 +378,13 @@ class FrontController extends Controller
         $result = User::where(['email'=>$request->login_email])->first();
         if($result){
             if(Hash::check($request->password, $result->password)){
+                if($request->checkbox===null){
+                    setcookie('login_email',$request->login_email,100);
+                    setcookie('login_pwd',$request->password,100);
+                }else{
+                    setcookie('login_email',$request->login_email,time()+ 60*24*7);
+                    setcookie('login_pwd',$request->password,time()+ 60*24*7);
+                }
                 $request->session()->put('FRONT_USER_LOGIN',true);
                 $request->session()->put('FRONT_USER_ID',$result->id);
                 $request->session()->put('FRONT_USER_NAME',$result->name);
@@ -380,5 +400,14 @@ class FrontController extends Controller
         }
         return response()->json(['status'=>$status,'msg'=>$msg]);
             
+    }
+    public function email_verification(Request $request,$rand_id){
+        $result = User::where(['rand_id'=>$rand_id])->get();
+        if($result){
+            $model = User::find($result[0]->id);
+            $model->is_verify = 1;
+            $model->save();
+            return response()->json(['status'=>'success','msg'=>'Mail verification successfully.']);
+        }
     }
 }

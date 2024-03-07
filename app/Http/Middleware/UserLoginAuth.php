@@ -15,12 +15,10 @@ class UserLoginAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        prx($request->session()->all());
-        // if($request->session()->has('FRONT_USER_LOGIN')){
-
-        // }else{
-        //     return redirect("/");
-        // }
-        // return $next($request);
+        if(session()->has('FRONT_USER_LOGIN')){
+            return redirect("/");
+        }else{
+            return $next($request);
+        }
     }
 }

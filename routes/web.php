@@ -24,11 +24,8 @@ Route::controller(AdminController::class)->group(function(){
     Route::get('admin','index');
     Route::post('admin/auth','auth')->name('admin.auth');
 });
-// Route::group(['middleware'=>'login_auth'],function(){
-//     Route::controller(FrontController::class)->group(function(){
-        
-//     });
-// });
+
+
 Route::controller(FrontController::class)->group(function(){
     Route::get('/','index')->name('frontend.index');
     Route::post('add_to_cart','add_to_cart');
@@ -36,24 +33,25 @@ Route::controller(FrontController::class)->group(function(){
     Route::get('product/{slag}','product');
     Route::get('category/{id}','category');
     Route::get('search/{str}','search');
+    Route::get('email_verification/{id}','email_verification');
+    // group middleware
+    Route::group(['middleware'=>'login_auth'],function(){
+        Route::get('login','login');
+        Route::get('register','register');
+    });
+    // route middleware
     // Route::get('login','login')->middleware('login_auth');
     // Route::get('register','register')->middleware('login_auth');
-    Route::get('login','login');
-    Route::get('register','register');
     Route::post('register_process','register_process')->name('register.register_process');
     Route::post('login_process','login_process')->name('login.login_process');
 });
 
-Route::get('/page404',function(){
-    echo 'You have no access this page';
-    die();
-});
 
 Route::get('logout',function(){
     session()->forget('FRONT_USER_LOGIN');
     session()->forget('FRONT_USER_ID');
     session()->forget('FRONT_USER_NAME');
-    session()->flash('errors','Successfully sdfdsf Logout');
+    session()->flash('errors','Successfully Logout');
     return redirect('/');
 });
 
@@ -61,8 +59,6 @@ Route::get('logout',function(){
 Route::controller(SubscribeController::class)->group(function(){
     Route::post('frontend/subscribe','store')->name('frontend/subscribe');
 });
-
-
 
 Route::group(['middleware'=>'admin_auth'],function(){
     Route::controller(AdminController::class)->group(function(){
