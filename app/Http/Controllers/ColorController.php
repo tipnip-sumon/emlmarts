@@ -10,6 +10,7 @@ class ColorController extends Controller
    
     public function index()
     {
+        
         $result['data'] = Color::paginate(4);
         return view('admin/color',$result);
     }

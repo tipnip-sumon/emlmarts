@@ -375,6 +375,7 @@ class FrontController extends Controller
         return view('frontend.login');
     }
     public function login_process(Request $request){
+        prx($request);
         $result = User::where(['email'=>$request->login_email])->first();
         if($result){
             if(Hash::check($request->password, $result->password)){
@@ -405,9 +406,60 @@ class FrontController extends Controller
         $result = User::where(['rand_id'=>$rand_id])->get();
         if($result){
             $model = User::find($result[0]->id);
-            $model->is_verify = 1;
+            $model->is_verify = true;
+            $model->rand_id = '';
             $model->save();
             return response()->json(['status'=>'success','msg'=>'Mail verification successfully.']);
         }
     }
+    public function forgot_process(Request $request){
+        $result = User::where(['email'=>$request->forgot_email])->first();
+        $rand = rand(111111111,999999999);
+        if($result){
+            $result->is_forgot_password = true;
+            $result->rand_id = $rand;
+            $res = $result->save();
+            if($res){
+                $url = url('/forgot_pass');
+                $data = ['data'=>$rand,'url'=>$url];
+                $user['to'] = $request->forgot_email;
+                Mail::send('forgot_pass', $data, function($message) use ($user) {
+                    $message->to($user['to']);
+                    $message->subject('Forget Password');
+                });
+                
+            }
+            $status = 'success';
+            $msg = 'Please Check Your Email & Set Password.';
+        }else{
+            $status = 'error';
+            $msg = 'Email Id not Registered.';
+        }
+        return response()->json(['status'=>$status,'msg'=>$msg]);
+            
+    }
+    public function reset_password(Request $request, $id){
+        $user = User::where(['rand_id'=>$id])->first();
+        if($user){
+            return view('frontend.reset_password')->with(['user_id'=>$user->id]);
+        }else{
+            return response()->json(['status'=>"error",'msg'=>'Session Expire!']);
+        }
+    }
+    public function forgot_password_verify(Request $request){
+        $valid = Validator::make($request->all(),[
+            'password'=> 'required|min:6',
+            'confirmation_password'=> 'required_with:password|same:password|min:6',
+        ]);
+            if(!$valid->passes()){
+                return response()->json(['status'=>'error','error'=>$valid->errors()]);
+            }else{
+                $model = User::find($request->user_id);
+                $model->password = bcrypt($request->password);
+                $model->is_forgot_password = 0;
+                $model->rand_id = '';
+                $model->save();
+                return response()->json(['status'=>'success','msg'=>'Password Reset successfully.']);
+            }
+        }
 }

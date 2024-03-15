@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Brand;
+use Illuminate\Routing\RouteGroup;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaxController;
 use App\Http\Controllers\SizeController;
@@ -14,7 +16,6 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\HomeBannerController;
 use App\Http\Controllers\frontend\FrontController;
-use Illuminate\Routing\RouteGroup;
 
 Route::get('/', function () {
     return view('frontend.index');
@@ -44,6 +45,11 @@ Route::controller(FrontController::class)->group(function(){
     // Route::get('register','register')->middleware('login_auth');
     Route::post('register_process','register_process')->name('register.register_process');
     Route::post('login_process','login_process')->name('login.login_process');
+    Route::post('forgot_process','forgot_process')->name('forgot_process');
+    Route::get('reset_password/{data}','reset_password');
+    Route::post('forgot_password_verify','forgot_password_verify');
+    // Route::post('forgot_password_verify/{id}','forgot_password_verify');
+
 });
 
 
@@ -60,99 +66,99 @@ Route::controller(SubscribeController::class)->group(function(){
     Route::post('frontend/subscribe','store')->name('frontend/subscribe');
 });
 
-Route::group(['middleware'=>'admin_auth'],function(){
+Route::group(['middleware'=>'admin_auth','prefix'=> 'admin'],function(){
     Route::controller(AdminController::class)->group(function(){
-        Route::get('admin/dashboard','dashboard');
-        Route::get('admin/passwordupdate','passwordupdate');
+        Route::get('/dashboard','dashboard');
+        Route::get('/passwordupdate','passwordupdate');
     });
     Route::controller(CategoryController::class)->group(function(){
-        Route::get('admin/products-list','product_list');
-        Route::get('admin/category','index');
-        Route::get('admin/manage_category/{id}','manage_category');
-        Route::post('admin/category','manage_category_update');
-        Route::post('admin/insert0','insert')->name('admin.insert0');
-        Route::get('admin/category/delete/{id}','delete');
-        Route::get('admin/category/status/{status}/{id}','status');
+        Route::get('/products-list','product_list');
+        Route::get('/category','index');
+        Route::get('/manage_category/{id}','manage_category');
+        Route::post('/category','manage_category_update');
+        Route::post('/insert0','insert')->name('admin.insert0');
+        Route::get('/category/delete/{id}','delete');
+        Route::get('/category/status/{status}/{id}','status');
     });
     
     Route::controller(CouponController::class)->group(function(){
-        Route::get('admin/coupon-list','coupon_list');
-        Route::get('admin/coupon','index');
-        Route::get('admin/manage_coupon/{id}','manage_coupon');
-        Route::post('admin/coupon','manage_coupon_update');
-        Route::post('admin/insert1','insert')->name('admin.insert1');
-        Route::get('admin/coupon/delete/{id}','delete');
-        Route::get('admin/coupon/status/{status}/{id}','status');
+        Route::get('/coupon-list','coupon_list');
+        Route::get('/coupon','index');
+        Route::get('/manage_coupon/{id}','manage_coupon');
+        Route::post('/coupon','manage_coupon_update');
+        Route::post('/insert1','insert')->name('admin.insert1');
+        Route::get('/coupon/delete/{id}','delete');
+        Route::get('/coupon/status/{status}/{id}','status');
     });
     Route::controller(SizeController::class)->group(function(){
-        Route::get('admin/size-list','size_list');
-        Route::get('admin/size','index');
-        Route::get('admin/manage_size/{id}','manage_size');
-        Route::post('admin/size','manage_size_update');
-        Route::post('admin/insert2','insert')->name('admin.insert2');
-        Route::get('admin/size/delete/{id}','delete');
-        Route::get('admin/size/status/{status}/{id}','status');
-        Route::get('admin/size/status/{status}/{id}','status_list');
+        Route::get('/size-list','size_list');
+        Route::get('/size','index');
+        Route::get('/manage_size/{id}','manage_size');
+        Route::post('/size','manage_size_update');
+        Route::post('/insert2','insert')->name('admin.insert2');
+        Route::get('/size/delete/{id}','delete');
+        Route::get('/size/status/{status}/{id}','status');
+        Route::get('/size/status/{status}/{id}','status_list');
     });
     Route::controller(ColorController::class)->group(function(){
-        Route::get('admin/color-list','color_list');
-        Route::get('admin/color','index');
-        Route::get('admin/manage_color/{id}','manage_color');
-        Route::post('admin/color','manage_color_update');
-        Route::post('admin/insert3','insert')->name('admin.insert3');
-        Route::get('admin/color/delete/{id}','delete');
-        Route::get('admin/color/status/{status}/{id}','status');
-        Route::get('admin/color/status/{status}/{id}','status_list');
+        Route::get('/color-list','color_list');
+        Route::get('/color','index');
+        Route::get('/manage_color/{id}','manage_color');
+        Route::post('/color','manage_color_update');
+        Route::post('/insert3','insert')->name('admin.insert3');
+        Route::get('/color/delete/{id}','delete');
+        Route::get('/color/status/{status}/{id}','status');
+        Route::get('/color/status/{status}/{id}','status_list');
     });
     Route::controller(TaxController::class)->group(function(){
-        Route::get('admin/tax-list','tax_list');
-        Route::get('admin/tax','index');
-        Route::get('admin/manage_tax/{id}','manage_tax');
-        Route::post('admin/tax','manage_tax_update');
-        Route::post('admin/insert_tax','insert_tax')->name('admin.insert_tax');
-        Route::get('admin/tax/delete/{id}','delete');
-        Route::get('admin/tax/status/{status}/{id}','status_tax');
-        Route::get('admin/tax/status/{status}/{id}','status_list');
+        Route::get('/tax-list','tax_list');
+        Route::get('/tax','index');
+        Route::get('/manage_tax/{id}','manage_tax');
+        Route::post('/tax','manage_tax_update');
+        Route::post('/insert_tax','insert_tax')->name('admin.insert_tax');
+        Route::get('/tax/delete/{id}','delete');
+        Route::get('/tax/status/{status}/{id}','status_tax');
+        Route::get('/tax/status/{status}/{id}','status_list');
     });
     Route::controller(BrandController::class)->group(function(){
-        Route::get('admin/brand-list','brand_list');
-        Route::get('admin/brand','index');
-        Route::get('admin/manage_brand/{id}','manage_brand');
-        Route::post('admin/brand','manage_brand_update');
-        Route::post('admin/insert','insert')->name('admin.insert');
-        Route::get('admin/brand/delete/{id}','delete');
-        Route::get('admin/brand/status/{status}/{id}','status');
-        Route::get('admin/brand/status/{status}/{id}','status_list');
+        Route::get('/brand-list','brand_list');
+        Route::get('/brand','index');
+        Route::get('/manage_brand/{id}','manage_brand');
+        Route::post('/brand','manage_brand_update');
+        Route::post('/insert','insert')->name('admin.insert');
+        Route::get('/brand/delete/{id}','delete');
+        Route::get('/brand/status/{status}/{id}','status');
+        Route::get('/brand/status/{status}/{id}','status_list');
     });
     Route::controller(UserController::class)->group(function(){
-        Route::get('admin/user-list','show');
-        Route::get('admin/user','index');
-        Route::get('admin/user/status/{status}/{id}','status');
+        Route::get('/user-list','show');
+        Route::get('/user','index');
+        Route::get('/user/status/{status}/{id}','status');
     });
     Route::controller(ProductController::class)->group(function(){
-        Route::get('admin/product','product_list');
-        Route::get('admin/manage_products','index');
-        Route::get('admin/edit_products/{id}','manage_products');
-        Route::post('admin/edit_products','manage_product_update');
-        Route::post('admin/insert4','insert')->name('admin.insert4');
-        Route::get('admin/product/delete/{id}','delete');
-        Route::get('admin/edit_products/delete/{id}/{pid}','attr_delete');
-        Route::get('admin/edit_products_image/delete/{id}/{pid}','image_delete');
-        Route::get('admin/product/status/{status}/{id}','status');
-        Route::get('admin/product/status/{status}/{id}','status_list');
+        Route::get('/product','product_list');
+        Route::get('/manage_products','index');
+        Route::get('/edit_products/{id}','manage_products');
+        Route::post('/edit_products','manage_product_update');
+        Route::post('/insert4','insert')->name('admin.insert4');
+        Route::get('/product/delete/{id}','delete');
+        Route::get('/edit_products/delete/{id}/{pid}','attr_delete');
+        Route::get('/edit_products_image/delete/{id}/{pid}','image_delete');
+        Route::get('/product/status/{status}/{id}','status');
+        Route::get('/product/status/{status}/{id}','status_list');
     });
     Route::controller(HomeBannerController::class)->group(function(){
-        Route::get('admin/homebanner','homebanner_list');
-        Route::get('admin/homebanner','index');
-        Route::get('admin/manage_banner/{id}','manage_banner');
-        Route::post('admin/edit_homebanner','manage_homebanner_update');
-        Route::post('admin/insert_banner','insert_banner')->name('admin.insert_banner');
-        Route::get('admin/homebanner/delete/{id}','delete');
-        Route::get('admin/edit_homebanner/delete/{id}/{pid}','attr_delete');
-        Route::get('admin/edit_homebanner_image/delete/{id}/{pid}','image_delete');
-        Route::get('admin/homebanner/status/{status}/{id}','status');
+        Route::get('/homebanner','homebanner_list');
+        Route::get('/homebanner','index');
+        Route::get('/manage_banner/{id}','manage_banner');
+        Route::post('/edit_homebanner','manage_homebanner_update');
+        Route::post('/insert_banner','insert_banner')->name('admin.insert_banner');
+        Route::get('/homebanner/delete/{id}','delete');
+        Route::get('/edit_homebanner/delete/{id}/{pid}','attr_delete');
+        Route::get('/edit_homebanner_image/delete/{id}/{pid}','image_delete');
+        Route::get('/homebanner/status/{status}/{id}','status');
     });
-    Route::get('admin/logout',function(){
+    Route::get('/logout',function(){
         session()->forget('ADMIN_LOGIN');
         session()->forget('LOGIN_ID');
         session()->flash('errors','Successfully Logout');

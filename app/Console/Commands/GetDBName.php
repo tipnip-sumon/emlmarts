@@ -28,9 +28,9 @@ class GetDBName extends Command
      */
     public function handle()
     {
-        $name = current_url();
-        // $dbName = DB::connection()->getDatabaseName();
-        $this->info('Current database name is '.$name);
+        // $name = current_url();
+        $dbName = DB::connection()->getDatabaseName();
+        $this->info('Current database name is '.$dbName);
         // $name = DB::table('users')->get();
         // $this->info($name);
     }

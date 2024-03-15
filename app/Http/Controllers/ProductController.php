@@ -11,6 +11,7 @@ class ProductController extends Controller
 {
     
     public function index()
+    
     {
         $result['category'] = DB::table('categories')->where(['status'=>1])->get();
         $result['size'] = DB::table('sizes')->where(['status'=>1])->get();

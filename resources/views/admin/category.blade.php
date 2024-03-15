@@ -10,9 +10,15 @@
             <h2 class="content-title card-title">Categories</h2>
             <p>Add Category</p>
         </div>
-        <div>
-            <input type="text" placeholder="Search Categories" class="form-control bg-white" />
-        </div>
+        <form action="" class="col-9">
+            <div>
+                <input type="text" placeholder="Search Category" name="search" id="search" class="form-control bg-white" value="{{$search}}"/>
+            </div>
+            <button class="btn btn-primary mt-5">Search</button>
+            <a href="{{url('/admin/category')}}">
+                <button class="btn btn-danger mt-5" type="button">Reset</button>
+            </a>
+        </form>
     </div>
     <div class="card">
         <div class="card-body">
@@ -33,7 +39,7 @@
                             <label for="parent_category_id" class="form-label"> Parent Category</label>
                             <select class="form-select" id="parent_category_id" name="parent_category_id">
                                 <option value="0">Select Parent Categories</option>
-                                    @foreach ($data as $list)
+                                    @foreach ($category as $list)
                                         <option value="{{$list->id}}">{{$list->category_name}}</option>
                                     @endforeach
                             </select>
@@ -108,7 +114,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $show)
+                                @foreach ($category as $show)
                                 <tr>
                                     <td class="text-center">
                                         <div class="form-check">

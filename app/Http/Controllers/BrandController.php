@@ -7,10 +7,16 @@ use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $result['data'] = Brand::all();
-        return view('admin/Brand',$result);
+        $search = $request['search'] ??'';
+        if(isset($search)) {
+            $brand = Brand::where('brand_name','LIKE', "%$search%")->get();
+        } else {
+            $brand = Brand::all();
+        }
+        $data = compact('brand','search');
+        return view('admin/brand')->with($data);
     }
     public function product_list()
     {

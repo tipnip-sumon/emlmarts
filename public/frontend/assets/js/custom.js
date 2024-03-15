@@ -177,6 +177,62 @@ jQuery("#frmLogin").submit(function (e) {
     });
 });
 
+jQuery("#frmForgot").submit(function (e) {
+    e.preventDefault();
+    jQuery.ajax({
+        type: "POST",
+        url: "forgot_process",
+        data: jQuery("#frmForgot").serialize(),
+        success: function (res) {
+            if(res.status=='success'){
+                $('#forgot_success_msg').html(res.msg);
+                setTimeout(() => {
+                    $('#forgot_success_msg').fadeOut();
+                }, 5000);
+            }
+            if(res.status=='error'){
+                $('#forgot_error_msg').html(res.msg);
+                setTimeout(() => {
+                    $('#forgot_error_msg').fadeOut();
+                }, 5000);
+            }
+        }
+    });
+});
+function forgot_password(){
+    $('#popup_forgot').show();
+    $('#popup_login').hide();
+}
+function show_login_popup(){
+    $('#popup_forgot').hide();
+    $('#popup_login').show();
+}
+$('#frmResetPass').submit(function(e){
+    e.preventDefault();
+    $(".field_error").html("");
+    $.ajax({
+        type: "POST",
+        url: "/forgot_password_verify",
+        data: jQuery("#frmResetPass").serialize(),
+        success: function (res) {
+            if(res.status=='error'){
+                $.each(res.error,function(key,val){
+                    $('#' + key + '_error').html(val[0]);
+                });
+            }
+            if(res.status=='success'){
+                $('#frmResetPass')[0].reset();
+                $('#reset_success_msg').html(res.msg);
+                setTimeout(() => {
+                    $('#reset_success_msg').fadeOut();
+                    window.location.href = '/login';
+                }, 5000);
+            }
+        }
+    });
+});
+
+
 // function increment_quantity(cart_id) {
 //     var inputQuantityElement = $("#input-quantity-"+cart_id);
 //     var newQuantity = parseInt($(inputQuantityElement).val())+1;

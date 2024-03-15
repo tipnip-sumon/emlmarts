@@ -20,7 +20,7 @@
                     <div class="col-xl-8 col-lg-10 col-md-12 m-auto">
                         <div class="row">
                             <div class="col-lg-6 pr-30 d-none d-lg-block">
-                                <img class="border-radius-15" src="assets/imgs/page/login-1.png" alt="" />
+                                <img class="border-radius-15" src="{{asset('frontend/assets/imgs/page/login-1.png')}}" alt="" />
                             </div>
                             {{-- @dd($_COOKIE['login_email']) --}}
                             @php
@@ -36,7 +36,7 @@
                             @endphp
                             <div class="col-lg-6 col-md-8">
                                 <div class="login_wrap widget-taber-content background-white">
-                                    <div class="padding_eight_all bg-white">
+                                    <div class="padding_eight_all bg-white" id="popup_login">
                                         <div class="heading_s1">
                                             <h1 class="mb-5">Login</h1>
                                             <p class="mb-30">Don't have an account? <a href="{{url('register')}}">Create here</a></p>
@@ -67,12 +67,29 @@
                                                         <label class="form-check-label" for="exampleCheckbox1"><span>Remember me</span></label>
                                                     </div>
                                                 </div>
-                                                <a class="text-muted" href="#">Forgot password?</a>
+                                                <a class="text-muted" href="javascript:void(0)" onclick="forgot_password()">Forgot password?</a>
                                             </div>
                                             <div class="mb-4 atert alert-success" id="login_success_msg"></div>
                                             <div class="mb-4 atert alert-danger" id="login_error_msg"></div>
                                             <div class="form-group">
                                                 <button type="submit" class="btn btn-heading btn-block hover-up" id="btnLogin">Log in</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="padding_eight_all bg-white" id="popup_forgot" style="display: none">
+                                        <div class="heading_s1">
+                                            <h1 class="mb-5">Forgot Password</h1>
+                                            <p class="mb-30">Login Form ? <a href="javascript:void(0)" onclick="show_login_popup()">Login Now</a></p>
+                                        </div>
+                                        <form id="frmForgot">
+                                            @csrf
+                                            <div class="form-group">
+                                                <input type="text" required="" name="forgot_email" placeholder="Submit Your Valid Email" />
+                                            </div>
+                                            <div class="mb-4 atert alert-success" id="forgot_success_msg"></div>
+                                            <div class="mb-4 atert alert-danger" id="forgot_error_msg"></div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-heading btn-block hover-up" id="btnForgot">Submit</button>
                                             </div>
                                         </form>
                                     </div>

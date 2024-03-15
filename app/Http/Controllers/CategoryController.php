@@ -8,10 +8,19 @@ use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $result['data'] = Category::all();
-        return view('admin/category',$result);
+        $search = $request['search'] ??'';
+        if(isset($search) && strlen(trim($search)) > 3) {
+            $category = Category::where('category_name','like','%'.$search.'%')
+                        ->orWhere('category_description','like','%'.$search.'%')
+                        ->orWhere('category_slug','like','%'.$search.'%')
+                        ->get();
+        }else{
+            $category = Category::all();
+        }
+        $data = compact('search','category');
+        return view('admin/category')->with($data);
     }
     public function product_list()
     {

@@ -3,9 +3,6 @@
 
 @section('container')
     <body>
-        <!-- Modal -->
-        
-        <!--End header-->
         <main class="main">
             <div class="modal fade custom-modal" id="#onloadModal" tabindex="-1" aria-labelledby="onloadModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -1406,8 +1403,6 @@
                 </div>
             </section>
         </main>
-        <!--End 4 columns--> 
-        <!-- Preloader Start -->
         <div id="preloader-active">
             <div class="preloader d-flex align-items-center justify-content-center">
                 <div class="preloader-inner position-relative">

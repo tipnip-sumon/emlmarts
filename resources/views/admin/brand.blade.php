@@ -10,9 +10,15 @@
             <h2 class="content-title card-title">Brand</h2>
             <p>Add Brand</p>
         </div>
-        <div>
-            <input type="text" placeholder="Search Categories" class="form-control bg-white" />
-        </div>
+        <form action="" class="col-9">
+            <div>
+                <input type="text" placeholder="Search Brand" name="search" id="search" class="form-control bg-white" value="{{$search}}"/>
+            </div>
+            <button class="btn btn-primary mt-5">Search</button>
+            <a href="{{url('/admin/brand')}}">
+                <button class="btn btn-danger mt-5" type="button">Reset</button>
+            </a>
+        </form>
     </div>
     {{session('message')}}
     <div class="card">
@@ -76,7 +82,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($data as $show)
+                                @foreach ($brand as $show)
                                 <tr>
                                     <td class="text-center">
                                         <div class="form-check">

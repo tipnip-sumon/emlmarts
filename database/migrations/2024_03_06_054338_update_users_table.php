@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->after('status', function (Blueprint $table) {
+                $table->integer('is_forgot_password')->default(0);
                 $table->integer('is_verify')->default(0);
                 $table->string('rand_id')->nullable();
             });
@@ -25,10 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->after('status', function (Blueprint $table) {
-                $table->integer('is_verify')->default(0);
-                $table->string('rand_id')->nullable();
-            });
+            $table->dropColumn(['is_forgot_password','is_verify','rand_id']);
         });
     }
 };
