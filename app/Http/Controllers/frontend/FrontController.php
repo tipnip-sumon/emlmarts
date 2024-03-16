@@ -375,9 +375,12 @@ class FrontController extends Controller
         return view('frontend.login');
     }
     public function login_process(Request $request){
-        prx($request);
+        // prx($request);
         $result = User::where(['email'=>$request->login_email])->first();
-        if($result){
+        if($result === null){
+            $status='error';
+            $msg='Please enter your valid email';
+        }else{
             if(Hash::check($request->password, $result->password)){
                 if($request->checkbox===null){
                     setcookie('login_email',$request->login_email,100);
@@ -395,16 +398,15 @@ class FrontController extends Controller
                 $status='error';
                 $msg="Incorrect Password";
             }
-        }else{
-            $status='error';
-            $msg='Please enter your valid email';
         }
         return response()->json(['status'=>$status,'msg'=>$msg]);
             
     }
     public function email_verification(Request $request,$rand_id){
-        $result = User::where(['rand_id'=>$rand_id])->get();
-        if($result){
+        $result = User::where(['rand_id'=>$rand_id])->where(['is_verify'=>'0'])->get();
+        if($result  === null){
+            return response()->json(['status'=>'success','msg'=>'Mail Already Verified.']);
+        }else{
             $model = User::find($result[0]->id);
             $model->is_verify = true;
             $model->rand_id = '';
