@@ -14,7 +14,7 @@ function showColor(size) {
     jQuery("." + size).show();
 }
 function home_add_to_cart(id, size_str_id, color_str_id) {
-    alert(size_str_id);
+    // alert(size_str_id);
     jQuery("#size_id").val(size_str_id);
     jQuery("#color_id").val(color_str_id);
     add_to_cart(id, size_str_id, color_str_id);
@@ -65,7 +65,7 @@ function add_to_cart(id, size_str_id, color_str_id) {
             data: jQuery("#fromAddToCart").serialize(),
             type: "POST",
             success: function (res) {
-                console.log(res);
+                // console.log(res);
                 totalPrice = 0;
                 if (res.totalItem == 0) {
                     jQuery(".pro-count").html("0");
@@ -92,12 +92,12 @@ function add_to_cart(id, size_str_id, color_str_id) {
                     });
                 }
                 html +=
-                    '<div class="shopping-cart-footer"><div class="shopping-cart-total"><h4>Total <span>$' +
+                    '<div class="shopping-cart-footer"><div class="shopping-cart-total"><h4>Total <span>৳' +
                     totalPrice +
-                    '</span></h4></div><div class="shopping-cart-button"><a href="{{route("frontend.cart")}}" class="outline">View cart</a><a href="shop-checkout.html">Checkout</a></div></div>';
+                    '</span></h4></div><div class="shopping-cart-button"><a href="{{route("frontend.cart")}}" class="outline">View cart</a><a href="{{route("frontend.cart")}}">Checkout</a></div></div>';
                 html += "</ul>";
                 jQuery(".cart_sub_ttl").html(
-                    '<h4 class="text-brand text-end">$' + totalPrice + "</h4>"
+                    '<h4 class="text-brand text-end">৳' + totalPrice + "</h4>"
                 );
                 // console.log(html);
                 jQuery("#cartBox").html(html);
@@ -160,9 +160,9 @@ jQuery("#frmLogin").submit(function (e) {
         url: "login_process",
         data: jQuery("#frmLogin").serialize(),
         success: function (result) {
-            console.log(result.msg);
+            // console.log(result.msg);
             if(result.status=='success'){
-                window.location.href='/';
+                window.location.href=window.location.href;
                 jQuery('#login_success_msg').html(result.msg);
                 setTimeout(() => {
                     jQuery('#login_success_msg').fadeOut();
@@ -179,23 +179,35 @@ jQuery("#frmLogin").submit(function (e) {
 
 jQuery("#frmForgot").submit(function (e) {
     e.preventDefault();
+    let ForgetData = jQuery("#frmForgot").serialize();
     jQuery.ajax({
         type: "POST",
         url: "forgot_process",
-        data: jQuery("#frmForgot").serialize(),
+        data: ForgetData,
+        beforeSend:function(){
+            $('.btn-heading').prop('disabled',true);
+        },
+        complete: function(){
+            $('.btn-heading').prop('disabled',false);
+        },
         success: function (res) {
+            // console.log(res);
             if(res.status=='success'){
                 $('#forgot_success_msg').html(res.msg);
                 setTimeout(() => {
                     $('#forgot_success_msg').fadeOut();
+                    // location.reload(true);
                 }, 5000);
             }
             if(res.status=='error'){
                 $('#forgot_error_msg').html(res.msg);
                 setTimeout(() => {
                     $('#forgot_error_msg').fadeOut();
+                    // location.reload(true);
                 }, 5000);
             }
+            $('#frmForgot')[0].reset();
+            
         }
     });
 });
@@ -214,6 +226,12 @@ $('#frmResetPass').submit(function(e){
         type: "POST",
         url: "/forgot_password_verify",
         data: jQuery("#frmResetPass").serialize(),
+        beforeSend:function(){
+            $('.btn-heading').prop('disabled',true);
+        },
+        complete: function(){
+            // $('.btn-heading').prop('disabled',false);
+        },
         success: function (res) {
             if(res.status=='error'){
                 $.each(res.error,function(key,val){
@@ -230,6 +248,35 @@ $('#frmResetPass').submit(function(e){
             }
         }
     });
+});
+$('#apply_coupon').submit(function(e){
+    e.preventDefault();
+    $.ajax({
+        url:'apply_coupon_code',
+        type:'POST',
+        data: $('#apply_coupon').serialize(),
+        success:function(result){
+            if(result.status === 'success'){
+                $('#coupon_code_msg').show();
+                $('.coupon_apply_code').show();
+                $('#coupon_price').html('- ৳'+result.coupon_price);
+                $('#total_price').html('- ৳'+result.cart_price);
+                $('#coupon_code_msg').html(result.msg);
+                setTimeout(() => {
+                    $('#coupon_code_msg').fadeOut();
+                    $('#apply_coupon')[0].reset();
+                }, 5000);
+            }
+            if(result.status === 'error'){
+                $('#coupon_code_error_msg').show();
+                $('#coupon_code_error_msg').html(result.msg);
+                setTimeout(() => {
+                    $('#coupon_code_error_msg').fadeOut();
+                    $('#apply_coupon')[0].reset();
+                }, 5000);
+            }
+        }
+    })
 });
 
 

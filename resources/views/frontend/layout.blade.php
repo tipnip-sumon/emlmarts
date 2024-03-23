@@ -91,12 +91,12 @@
             <div class="header-wrap">
                 <div class="logo logo-width-1">
                     @php
-                    $url = current_url();
+                    $url = url();
                    
                     $category_list = getTopNavCat();
                     // prx($category_list['categories']);
                     @endphp
-                    <a href="{{$url}}">
+                    <a href="/">
                         {{Config::get('constants.site_name')}} 
                         {{-- <img src="{{asset('frontend/assets/imgs/theme/logo.svg')}}" alt="logo" /> --}}
                     </a>
@@ -189,7 +189,7 @@
                                         </div>
                                         <div class="shopping-cart-button">
                                             <a href="{{route('frontend.cart')}}" class="outline">View cart</a>
-                                            <a href="shop-checkout.html">Checkout</a>
+                                            <a href="{{route('frontend.checkout')}}">Checkout</a>
                                         </div>
                                     </div>
                                 </div>

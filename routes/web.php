@@ -31,10 +31,12 @@ Route::controller(FrontController::class)->group(function(){
     Route::get('/','index')->name('frontend.index');
     Route::post('add_to_cart','add_to_cart');
     Route::get('cart','cart')->name('frontend.cart');
+    Route::get('checkout','checkout')->name('frontend.checkout');
     Route::get('product/{slag}','product');
     Route::get('category/{id}','category');
     Route::get('search/{str}','search');
     Route::get('email_verification/{id}','email_verification');
+    Route::post('apply_coupon_code','apply_coupon_code');
     // group middleware
     Route::group(['middleware'=>'login_auth'],function(){
         Route::get('login','login');
@@ -57,6 +59,7 @@ Route::get('logout',function(){
     session()->forget('FRONT_USER_LOGIN');
     session()->forget('FRONT_USER_ID');
     session()->forget('FRONT_USER_NAME');
+    session()->forget('USER_TEMP_ID');
     session()->flash('errors','Successfully Logout');
     return redirect('/');
 });

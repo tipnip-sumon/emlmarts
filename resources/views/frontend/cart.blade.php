@@ -64,7 +64,7 @@
                                     </div>
                                 </td>
                                 <td class="price" data-title="Price">
-                                    <h4 class="text-body">${{$show->price}}</h4>
+                                    <h4 class="text-body">৳{{$show->price}}</h4>
                                 </td>
                                 <td class="text-center detail-info" data-title="Stock">
                                     <div class="detail-extralink mr-15">
@@ -76,7 +76,7 @@
                                     </div>
                                 </td>
                                 <td class="price" data-title="Price">
-                                    <h4 class="text-brand" id="total_price_{{$show->attr_id}}">${{$show->price*$show->qty}} </h4>
+                                    <h4 class="text-brand" id="total_price_{{$show->attr_id}}">৳{{$show->price*$show->qty}} </h4>
                                 </td>
                                 <td class="action text-center" data-title="Remove"><a href="#" onclick="deleteAddToCart('{{$show->products_id}}','{{$show->size}}','{{$show->color}}','{{$show->attr_id}}')" class="text-body"><i class="fi-rs-trash"></i></a></td>
                                 <input type="hidden" id="qty" value="1"/>
@@ -391,7 +391,7 @@
                                         <h6 class="text-muted">Subtotal</h6>
                                     </td>
                                     <td class="cart_total_amount cart_sub_ttl">
-                                        <h4 class="text-brand text-end">${{$totalAmount}}</h4>
+                                        <h4 class="text-brand text-end">৳{{$totalAmount}}</h4>
                                     </td>
                                 </tr>
                                 <tr>

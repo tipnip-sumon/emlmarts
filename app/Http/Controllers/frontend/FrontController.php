@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\frontend;
 
-use Illuminate\Http\Response;
 use Carbon\Carbon;
+use App\Models\Cart;
 use App\Models\User;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -149,7 +151,7 @@ class FrontController extends Controller
     public function add_to_cart(Request $request)
     {
         if($request->session()->has('FRONT_USER_LOGIN')){
-            $uid = $request->session()->get('FRONT_USER_LOGIN');
+            $uid = $request->session()->get('FRONT_USER_ID');
             $user_type = "Reg";
         }else{
             $uid = getUserTempId();
@@ -219,7 +221,7 @@ class FrontController extends Controller
     public function cart(Request $request)
     {
         if($request->session()->has('FRONT_USER_LOGIN')){
-            $uid = $request->session()->get('FRONT_USER_LOGIN');
+            $uid = $request->session()->get('FRONT_USER_ID');
             $user_type = "Reg";
         }else{
             $uid = getUserTempId();
@@ -394,6 +396,10 @@ class FrontController extends Controller
                 $request->session()->put('FRONT_USER_NAME',$result->name);
                 $status='success';
                 $msg="Login Successfully";
+                $getUserTempId = getUserTempId();
+                DB::table('carts')
+                    ->where(['user_id'=>$getUserTempId,'user_type'=>'Not-Reg'])
+                    ->update(['user_id'=>$result->id,'user_type'=>'Reg']);
             }else{
                 $status='error';
                 $msg="Incorrect Password";
@@ -433,11 +439,13 @@ class FrontController extends Controller
             }
             $status = 'success';
             $msg = 'Please Check Your Email & Set Password.';
+            return response()->json(['status'=>$status,'msg'=>$msg]);
         }else{
             $status = 'error';
             $msg = 'Email Id not Registered.';
+            return response()->json(['status'=>$status,'msg'=>$msg]);
         }
-        return response()->json(['status'=>$status,'msg'=>$msg]);
+        
             
     }
     public function reset_password(Request $request, $id){
@@ -463,5 +471,80 @@ class FrontController extends Controller
                 $model->save();
                 return response()->json(['status'=>'success','msg'=>'Password Reset successfully.']);
             }
+        }
+        public function checkout(Request $request){
+            $result['cart_data'] = getAddToCartTotalItem();
+            // prx($result);
+            if(isset($result['cart_data'][0])){
+                if($request->session()->has('FRONT_USER_LOGIN')){
+                    $uid = $request->session()->get('FRONT_USER_ID');
+                    $user_type = "Reg";
+                }else{
+                    $uid = getUserTempId();
+                    $user_type = "Not-Reg";
+                }
+                $user_info = DB::table('users')->where(['id'=>$uid])->get();
+                $result['user_info']['name'] = $user_info[0]->name;
+                $result['user_info']['email'] = $user_info[0]->email;
+                $result['user_info']['mobile'] = $user_info[0]->mobile;
+                $result['user_info']['address'] = $user_info[0]->address;
+                $result['user_info']['city'] = $user_info[0]->city;
+                $result['user_info']['country'] = $user_info[0]->country;
+                $result['user_info']['zip'] = $user_info[0]->zip;
+                $result['user_info']['company'] = $user_info[0]->company;
+                return view('frontend.checkout', $result);
+            }else{
+                return redirect('/');
+            }
+            
+        }
+        public function apply_coupon_code(Request $request){
+            $result = Coupon::where('code',$request->coupon_code)->first();
+            // prx($result);
+            if(!is_null($result)){
+                $type = $result->type;
+                $value = $result->value;
+                if($result->status == 1){
+                    if($result->is_one_time == 1){
+                        $status = 'error';
+                        $msg = 'Coupon Code Already Used!';
+                    }else{
+                        $total_price = getAddToCartTotalItem();
+                        $cart_price = 0;
+                        foreach($total_price as $item){
+                            $cart_price += $item->price*($item->qty);
+                        }
+                        $min_order_amt = $result->min_order_amt;
+                        if( $cart_price < $min_order_amt){
+                            $status = "error";
+                            $msg = "You have must be purchase order minimum $min_order_amt";
+                        }else{
+                            $status = "success";
+                            $msg = "Coupon Applied!";
+                        }
+                    }
+                }else{
+                    $status = "error";
+                    $msg = "Coupon Code Deactivated!";
+                }
+                    
+            }else{
+                $status = "error";
+                $msg = "Invalid Coupon Code!";
+            }
+            if( $status == "success"){
+                if($type == 'value'){
+                    $cart_price_tl = $cart_price - $value;
+                    $coupon_price = round($value);
+                }
+                if($type == 'per'){
+                    $cart_price_tl = round($cart_price - ($cart_price*$value)/100);
+                    $coupon_price = round($cart_price*$value/100);
+                }
+            }else{
+                $cart_price_tl = 0;
+                $coupon_price = 0;
+            }
+            return response()->json(["status"=> $status,"msg"=> $msg,"cart_price"=>$cart_price_tl,"coupon_price"=>$coupon_price]);
         }
 }
