@@ -24,9 +24,7 @@
                             <input type="text" placeholder="Type here"  class="form-control" id="color" name="color"/>
                         </div>
                         @error('color')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                            <x-alert type="warning" :$message/>
                         @enderror
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Create Color</button>

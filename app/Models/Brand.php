@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Brand extends Model
 {
     use HasFactory;
+
+    public function scopeStatus($query)
+    {
+        return $query->where('status',1); //local scope
+    }
+    
 }

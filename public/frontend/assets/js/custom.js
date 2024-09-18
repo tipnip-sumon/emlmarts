@@ -140,12 +140,18 @@ jQuery("#formRegister").submit(function (e) {
         success: function (res) {
             if (res.status == "error") {
                 jQuery.each(res.error, function (key, val) {
+                    console.log(key);
+                    if(key+"_error"){
+                        jQuery("#" + key + "_error").show();
+                    }else{
+                        jQuery("#" + key + "_error").hide();
+                    }
                     jQuery("#" + key + "_error").html(val[0]);
                 });
             }
             if (res.status == "success") {
                 jQuery("#formRegister")[0].reset();
-                jQuery("#success_msg").html(res.msg);
+                jQuery("#success_msg").html('<div class="mb-4 alert alert-success">'+res.msg+'</div>');
                 setTimeout(() => {
                     jQuery("#success_msg").fadeOut();
                 }, 2000);

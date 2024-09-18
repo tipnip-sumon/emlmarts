@@ -43,13 +43,13 @@ class AdminController extends Controller
                 session()->put('ADMIN_ID',$result->id);
                 return redirect('admin/dashboard');
             }else{
-                session()->flash('errors','Please Correct Password');
-                return redirect('admin');
+                // session()->flash('errors','Please Correct Password');
+                return redirect('admin')->with('errors','Please Correct Password');
             }
            
         }else{
-            session()->flash('errors','Please Correct Login Details');
-            return redirect('admin');
+            // session()->flash('errors','Please Correct Login Details');
+            return redirect('admin')->with('errors','Please Correct Login Details');
         }
 
     }

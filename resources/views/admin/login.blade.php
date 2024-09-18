@@ -62,9 +62,7 @@
                                 <button type="submit" class="btn btn-primary w-100">Login</button>
                             </div>
                             @if(!empty(Session::get('errors')))
-                                <div class="mb-4 alert alert-danger" id="remove">
-                                    {{Session::get('errors')}}
-                                </div>
+                                <x-alert type="danger" id="remove"  message="{{Session::get('errors')}}"/>
                             @endif
                             <!-- form-group// -->
                         </form>

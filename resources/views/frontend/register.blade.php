@@ -30,23 +30,23 @@
                                             <div class="form-group">
                                                 <input type="text" value="{{old('username')}}"  name="username" placeholder="Full Name" required/>
                                             </div>
-                                            <div class="mb-4 atert alert-danger field_error" id="username_error"></div>
+                                            <div class="mb-4 alert alert-danger field_error" style="display: none" id="username_error"></div>
                                             <div class="form-group">
                                                 <input type="email" value="{{old('email')}}"  name="email" placeholder="Email" required/>
                                             </div>
-                                            <div class="mb-4 atert alert-danger field_error" id="email_error"></div>
+                                            <div class="mb-4 alert alert-danger field_error" style="display: none" id="email_error"></div>
                                             <div class="form-group">
                                                 <input type="number" value="{{old('mobile')}}"  name="mobile" placeholder="Mobile" required/>
                                             </div>
-                                            <div class="mb-4 atert alert-danger field_error" id="mobile_error"></div>
+                                            <div class="mb-4 alert alert-danger field_error" style="display: none" id="mobile_error"></div>
                                             <div class="form-group">
                                                 <input  type="password" value="{{old('password')}}" name="password" placeholder="Password" required/>
                                             </div>
-                                            <div class="mb-4 atert alert-danger field_error" id="password_error"></div>
+                                            <div class="mb-4 alert alert-danger field_error" style="display: none" id="password_error"></div>
                                             <div class="form-group">
                                                 <input  type="password" value="{{old('password_confirmation')}}" name="password_confirmation" placeholder="Confirm password" required/>
                                             </div>
-                                            <div class="mb-4 atert alert-danger field_error" id="password_confirmation_error"></div>
+                                            <div class="mb-4 alert alert-danger field_error" style="display: none" id="password_confirmation_error"></div>
                                             {{-- <div class="login_footer form-group">
                                                 <div class="chek-form">
                                                     <input type="text"  name="email" placeholder="Security code *" />
@@ -80,7 +80,7 @@
                                             <div class="form-group mb-30">
                                                 <button type="submit" class="btn btn-fill-out btn-block hover-up font-weight-bold" id="regisBtn">Submit &amp; Register</button>
                                             </div>
-                                            <div class="mb-4 atert alert-success" id="success_msg"></div>
+                                            <span id="success_msg"></span>
                                             {{-- <p class="font-xs text-muted"><strong>Note:</strong>Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our privacy policy</p> --}}
                                         </form>
                                     </div>

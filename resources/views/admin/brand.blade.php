@@ -3,9 +3,7 @@
 @section('brand_active','active')
 @section('container')
 <section class="content-main">
-    {{session('message')}}
     <div class="content-header">
-        
         <div>
             <h2 class="content-title card-title">Brand</h2>
             <p>Add Brand</p>
@@ -20,7 +18,6 @@
             </a>
         </form>
     </div>
-    {{session('message')}}
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -32,9 +29,7 @@
                             <input type="text" placeholder="Type here"  class="form-control" id="brand_name" name="brand_name"/>
                         </div>
                         @error('brand_name')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                            <x-alert type="warning" :$message/>
                         @enderror
                         <div class="mb-4">
                             <label for="image" class="form-label">Brand Images</label>
@@ -43,9 +38,7 @@
                             </div>
                         </div>
                         @error('image')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                        <x-alert type="warning" :$message/>
                         @enderror
                         <div class="mb-4">
                             <label for="is_home" class="form-label">Show Brand</label>
@@ -55,14 +48,14 @@
                             </select>
                         </div>
                         @error('is_home')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                            <x-alert type="danger" :$message/>
                         @enderror
-                        <div class="d-grid">
+                        <div class="d-grid mb-4">
                             <button type="submit" class="btn btn-primary">Create Brand</button>
                         </div>
-                        
+                        @if (session('message'))
+                            <x-alert type="success" message="{{session('message')}}"/>
+                        @endif
                     </form>
                 </div>
                 <div class="col-md-9">

@@ -31,9 +31,7 @@
                             <input type="text" placeholder="Type here"  class="form-control" id="category_name" name="category_name"/>
                         </div>
                         @error('category_name')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                         <x-alert type="warning" :$message/>
                         @enderror
                         <div class="mb-4">
                             <label for="parent_category_id" class="form-label"> Parent Category</label>
@@ -45,18 +43,14 @@
                             </select>
                         </div>
                         @error('parent_category_id')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                            <x-alert type="warning" :$message/>
                         @enderror
                         <div class="mb-4">
                             <label for="category_slug" class="form-label"> Category Slug</label>
                             <input type="text" placeholder="Type here" class="form-control" id="category_slug" name="category_slug" />
                         </div>
                         @error('category_slug')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                        <x-alert type="warning" :$message/>
                         @enderror
                         <div class="mb-4">
                             <label for="image" class="form-label">Category Images</label>
@@ -65,9 +59,7 @@
                             </div>
                         </div>
                         @error('image')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                            <x-alert type="warning" :$message/>
                         @enderror
                         <div class="mb-4">
                             <label for="category_order" class="form-label"> Category Order</label>
@@ -81,9 +73,7 @@
                             </select>
                         </div>
                         @error('is_home')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                        <x-alert type="warning" :$message/>
                         @enderror
                         <div class="mb-4">
                             <label class="form-label">Description</label>

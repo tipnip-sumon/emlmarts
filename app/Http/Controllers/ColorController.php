@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Color;
 use Illuminate\Http\Request;
+use App\Http\Requests\ColorRequest;
 
 class ColorController extends Controller
 {
@@ -26,12 +27,9 @@ class ColorController extends Controller
         return view('admin/manage_color',$result['data']);
         
     }
-    public function manage_color_update(Request $request)
+    public function manage_color_update(ColorRequest $request)
     {
-        $request->validate([
-            'color'=>'unique:colors,color'
-        ]);
-
+        
         $model = Color::find($request->id);
         $model->color = $request->color;
         $model->id = $request->post('id');

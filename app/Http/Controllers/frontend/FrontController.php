@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Requests\FrontRequest;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -21,6 +22,10 @@ use Illuminate\Support\Facades\Validator;
 
 class FrontController extends Controller
 {
+
+    public function show(){
+        return view('index');
+    }
     public function index(Request $request)
     {
         $result['home_categories'] = 

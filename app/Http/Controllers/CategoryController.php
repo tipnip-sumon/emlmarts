@@ -4,12 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
     public function index(Request $request)
     {
+        // $category = Category::findOrFail([3,4,5,6],['category_name','category_slug']);
+        //$category = Category::count(); // 9
+        //$category = Category::max('created_at');
+        // $category = Category::min('created_at');
+        // $category = Carbon::today()->toDateString();
+        //$category = Category::first();
+        //return $category;
+
+
+
         $search = $request['search'] ??'';
         if(isset($search) && strlen(trim($search)) > 3) {
             $category = Category::where('category_name','like','%'.$search.'%')
@@ -51,14 +63,9 @@ class CategoryController extends Controller
     }
 
 
-    public function insert(Request $request)
+    public function insert(CategoryRequest $request)
     {
-        $request->validate([
-            'category_name'=>'required|unique:categories',
-            'category_slug'=>'required|unique:categories',
-            'image'=>'required|mimes:jpg,jpeg,png',
-        ]);
-       
+        //dd($request);
         $model = new Category();
         if($request->hasfile('image')){
             $image=$request->file('image');

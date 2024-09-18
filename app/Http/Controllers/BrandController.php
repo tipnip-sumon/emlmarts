@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 
@@ -11,9 +12,9 @@ class BrandController extends Controller
     {
         $search = $request['search'] ??'';
         if(isset($search)) {
-            $brand = Brand::where('brand_name','LIKE', "%$search%")->get();
+            $brand = Brand::status()->where('brand_name','LIKE', "%$search%")->get(); //use local scope status()
         } else {
-            $brand = Brand::all();
+            //$brand = Brand::status()->get();
         }
         $data = compact('brand','search');
         return view('admin/brand')->with($data);
@@ -29,12 +30,8 @@ class BrandController extends Controller
         return view('admin/manage_brand',$result);
         
     }
-    public function manage_brand_update(Request $request)
+    public function manage_brand_update(BrandRequest $request)
     {
-        $request->validate([
-            'image'=>'mimes:jpg,jpeg,png'
-        ]);
-       
         $model = Brand::find($request->id);
 
         if($request->hasfile('image')){
@@ -55,13 +52,8 @@ class BrandController extends Controller
     }
 
 
-    public function insert(Request $request)
+    public function insert(BrandRequest $request)
     {
-        $request->validate([
-            'brand_name'=>'required|unique:brands',
-            'image'=>'required|mimes:jpg,jpeg,png',
-        ]);
-       
         $model = new Brand();
         if($request->hasfile('image')){
             $image=$request->file('image');

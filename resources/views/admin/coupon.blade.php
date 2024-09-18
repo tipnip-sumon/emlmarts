@@ -24,18 +24,14 @@
                             <input type="text" placeholder="Type here"  class="form-control" id="title" name="title"/>
                         </div>
                         @error('title')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                            <x-alert type="warning" :$message/>
                         @enderror
                         <div class="mb-4">
                             <label for="code" class="form-label"> Code</label>
                             <input type="text" placeholder="Type here" class="form-control" id="code" name="code" />
                         </div>
                         @error('code')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                            <x-alert type="warning" :$message/>
                         @enderror
                        
                         <div class="mb-4">
@@ -43,9 +39,7 @@
                             <input type="text" placeholder="Type here" class="form-control" id="value" name="value" />
                         </div>
                         @error('value')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                            <x-alert type="warning" :$message/>
                         @enderror
                         <div class="mb-4">
                             <label for="type" class="form-label"> Type</label>

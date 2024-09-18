@@ -25,9 +25,7 @@
                             <input type="text" placeholder="Type here"  class="form-control" id="size" name="size"/>
                         </div>
                         @error('size')
-                        <div class="mb-4 atert alert-danger">
-                            {{$message}}
-                        </div>
+                            <x-alert type="warning" :$message/>
                         @enderror
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Create size</button>

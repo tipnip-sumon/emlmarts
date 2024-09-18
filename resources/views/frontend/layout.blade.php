@@ -344,6 +344,7 @@
 @section('container')
 
 @show
+@yield('component')
 <footer class="main">
     <section class="section-padding footer-mid">
         <div class="container pt-15 pb-20">

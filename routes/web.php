@@ -29,9 +29,10 @@ Route::controller(AdminController::class)->group(function(){
 
 Route::controller(FrontController::class)->group(function(){
     Route::get('/','index')->name('frontend.index');
+    Route::get('/index','show');
     Route::post('add_to_cart','add_to_cart');
     Route::get('cart','cart')->name('frontend.cart');
-    Route::get('checkout','checkout')->name('frontend.checkout');
+    Route::get('checkout','checkout')->name('frontend.checkout'); 
     Route::get('product/{slag}','product');
     Route::get('category/{id}','category');
     Route::get('search/{str}','search');
@@ -164,8 +165,8 @@ Route::group(['middleware'=>'admin_auth','prefix'=> 'admin'],function(){
     Route::get('/logout',function(){
         session()->forget('ADMIN_LOGIN');
         session()->forget('LOGIN_ID');
-        session()->flash('errors','Successfully Logout');
-        return redirect('admin');
+        // session()->flash('errors','Successfully Logout');
+        return redirect('admin')->with('errors','Successfully Logout');
     });
     
 });

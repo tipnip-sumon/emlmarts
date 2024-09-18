@@ -16,11 +16,11 @@ class AdminAuth
     public function handle(Request $request, Closure $next): Response
     {
         if($request->session()->has('ADMIN_LOGIN')){
-
+            return $next($request); 
         }else{
-            session()->flash('errors','Access Denied');
-            return redirect('admin');
+            // session()->flash('errors','Access Denied');
+            return redirect('admin')->with('errors','Access Denied');
         } 
-        return $next($request); 
+        
     }
 }
