@@ -44,6 +44,7 @@ class ProductController extends Controller
             // if(Storage::exists('/public/media/'.$proImg[0]->image)){
             //     Storage::delete('/public/media/'.$proImg[0]->image);
             // };
+            //
             $image=$request->file('image');
             $ext = $image->extension();
             $image_name = time().'.'.$ext;
