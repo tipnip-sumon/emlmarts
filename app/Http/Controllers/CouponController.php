@@ -7,42 +7,17 @@ use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
         $result['data'] = Coupon::paginate(2);
         return view('admin/coupon',$result);
     }
     public function coupon_list()
     {
-        //
         $result['data'] = Coupon::paginate(2);
         //$data = Coupon::paginate(2);
         return view('admin/coupon-list',$result);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function manage_coupon($id)
     {
     
@@ -60,10 +35,13 @@ class CouponController extends Controller
         $model->title = $request->title;
         $model->code = $request->code;
         $model->value = $request->value;
+        $model->type = $request->type;
+        $model->min_order_amt = $request->min_order_amt;
+        $model->is_one_time = $request->is_one_time;
         $model->id = $request->post('id');
         $model->save();
         $msg = "Coupon Updated";
-        $request->session()->flash('message',$msg);
+        session()->flash('message',$msg);
         return redirect('admin/coupon');
     }
 
@@ -81,20 +59,20 @@ class CouponController extends Controller
         $model->title = $request->post('title');
         $model->code = $request->post('code');
         $model->value = $request->post('value');
+        $model->type = $request->post('type');
+        $model->min_order_amt = $request->post('min_order_amt');
+        $model->is_one_time = $request->post('is_one_time');
         $model->status = 1;
         $model->save();
         $msg = "Coupon Inserted";
-        $request->session()->flash('message',$msg);
+        session()->flash('message',$msg);
         return redirect('admin/coupon');
     }
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function delete(Request $request,$id)
     {
         $model = Coupon::find($id);
         $model->delete();
-        $request->session()->flash('message','Coupon Deleted');
+        session()->flash('message','Coupon Deleted');
         return redirect('admin/coupon');
     }
     public function status(Request $request,$status,$id)
@@ -102,27 +80,11 @@ class CouponController extends Controller
         $model = Coupon::find($id);
         $model->status = $status;
         $model->save();
-        $request->session()->flash('message','Status Changed');
+        session()->flash('message','Status Changed');
         return redirect('admin/coupon');
     }
     public function edit(Coupon $request,$id)
     {
         return $id;
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Coupon $coupon)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Coupon $request)
-    {
-        //
     }
 }

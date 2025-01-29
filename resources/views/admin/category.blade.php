@@ -8,7 +8,7 @@
         
         <div>
             <h2 class="content-title card-title">Categories</h2>
-            <p>Add, edit or delete a category</p>
+            <p>Add Category</p>
         </div>
         <div>
             <input type="text" placeholder="Search Categories" class="form-control bg-white" />
@@ -18,13 +18,27 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-3">
-                    <form action="{{route('admin.insert')}}" method="POST">
+                    <form action="{{route('admin.insert0')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-4">
                             <label for="category_name" class="form-label">Category Name</label>
                             <input type="text" placeholder="Type here"  class="form-control" id="category_name" name="category_name"/>
                         </div>
                         @error('category_name')
+                        <div class="mb-4 atert alert-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
+                        <div class="mb-4">
+                            <label for="parent_category_id" class="form-label"> Parent Category</label>
+                            <select class="form-select" id="parent_category_id" name="parent_category_id">
+                                <option value="0">Select Parent Categories</option>
+                                    @foreach ($data as $list)
+                                        <option value="{{$list->id}}">{{$list->category_name}}</option>
+                                    @endforeach
+                            </select>
+                        </div>
+                        @error('parent_category_id')
                         <div class="mb-4 atert alert-danger">
                             {{$message}}
                         </div>
@@ -38,11 +52,33 @@
                             {{$message}}
                         </div>
                         @enderror
-                       
+                        <div class="mb-4">
+                            <label for="image" class="form-label">Category Images</label>
+                            <div class="input-upload">
+                                <input class="form-control" type="file" id="image" name="image"/>
+                            </div>
+                        </div>
+                        @error('image')
+                        <div class="mb-4 atert alert-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
                         <div class="mb-4">
                             <label for="category_order" class="form-label"> Category Order</label>
                             <input type="text" placeholder="Type here" class="form-control" id="category_order" name="category_order" />
                         </div>
+                        <div class="mb-4">
+                            <label for="is_home" class="form-label">Show Category</label>
+                            <select class="form-select" id="is_home" name="is_home">
+                                <option selected value="0">No</option>
+                                <option  value="1">Yes</option>
+                            </select>
+                        </div>
+                        @error('is_home')
+                        <div class="mb-4 atert alert-danger">
+                            {{$message}}
+                        </div>
+                        @enderror
                         <div class="mb-4">
                             <label class="form-label">Description</label>
                             <textarea placeholder="Type here" class="form-control" id="category_description" name="category_description"></textarea>
@@ -98,7 +134,6 @@
                                                 <a class="dropdown-item text-danger" href="{{url('admin/category/delete')}}/{{$show['id']}}">Delete</a>
                                             </div>
                                         </div>
-                                        <!-- dropdown //end -->
                                     </td>
                                 </tr>
                                 @endforeach

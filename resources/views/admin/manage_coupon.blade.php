@@ -6,10 +6,10 @@
     <div class="content-header">
         
         <div>
-            <h2 class="content-title card-title">Categories</h2>
+            <h2 class="content-title card-title">Coupons</h2>
         </div>
         <div>
-            <input type="text" placeholder="Search Categories" class="form-control bg-white" />
+            <input type="text" placeholder="Search Coupon" class="form-control bg-white" />
         </div>
     </div>
     <div class="card">
@@ -42,6 +42,34 @@
                             <label for="value" class="form-label"> Coupon Value</label>
                             <input type="text" placeholder="Type here" value="{{$value}}"  class="form-control" id="value" name="value" />
                         </div>
+                        <div class="mb-4">
+                            <label for="type" class="form-label"> Type</label>
+                            <select class="form-select" name="type" id="type">
+                                @if($type=='value')
+                                <option selected value="Value">Value</option>
+                                <option value="Per">Percentage</option>
+                                @elseif ($type=='per')
+                                <option value="Value">Value</option>
+                                <option selected value="Per">Percentage</option>
+                                @endif
+                            </select>
+                       </div>
+                       <div class="mb-4">
+                            <label for="min_order_amt" class="form-label"> Min Order Amt</label>
+                            <input type="text" value="{{$min_order_amt}}" placeholder="Type here" class="form-control" id="min_order_amt" name="min_order_amt" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="is_one_time" class="form-label"> Is One Time</label>
+                            <select class="form-select" name="is_one_time" id="is_one_time">
+                                @if($is_one_time=='1')
+                                    <option selected value="1">Yes</option>
+                                    <option value="0">No</option>
+                                @else
+                                    <option value="1">Yes</option>
+                                    <option selected value="0">No</option>
+                                @endif
+                            </select>
+                       </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Update Coupon</button>
                         </div>

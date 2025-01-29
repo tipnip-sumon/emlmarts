@@ -82,5 +82,6 @@ class AdminController extends Controller
         $res = Admin::find(1);
         $res->password = Hash::make('123456');
         $res->save();
+
     }
 }

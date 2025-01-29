@@ -18,7 +18,7 @@ class AdminAuth
         if($request->session()->has('ADMIN_LOGIN')){
 
         }else{
-            $request->session()->flash('errors','Access Denied');
+            session()->flash('errors','Access Denied');
             return redirect('admin');
         } 
         return $next($request);

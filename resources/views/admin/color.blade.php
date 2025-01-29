@@ -7,8 +7,7 @@
     <div class="content-header">
         
         <div>
-            <h2 class="content-title card-title">Color</h2>
-            <p>Add, edit or delete a color</p>
+            <h2 class="content-title card-title">Add Color</h2>
         </div>
         <div>
             <input type="text" placeholder="Search Categories" class="form-control bg-white" />
@@ -30,7 +29,7 @@
                         </div>
                         @enderror
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Create size</button>
+                            <button type="submit" class="btn btn-primary">Create Color</button>
                         </div>
                         
                     </form>
