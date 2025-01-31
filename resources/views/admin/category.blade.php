@@ -74,6 +74,13 @@
                                 <option  value="1">Yes</option>
                             </select>
                         </div>
+                        <div class="mb-4">
+                            <label for="is_home" class="form-label">Show Category</label>
+                            <select class="form-select" id="is_home" name="is_home">
+                                <option selected value="0">No</option>
+                                <option  value="1">Yes</option>
+                            </select>
+                        </div>
                         @error('is_home')
                         <div class="mb-4 atert alert-danger">
                             {{$message}}
